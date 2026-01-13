@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>西山興業赤坂ビル有料駐車場 | Nishiyama Kogyo Akasaka Building Paid Parking</title>
+    <!-- External Libraries -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-8">
+        <div class="container mx-auto px-4 text-center">
+            <h1 class="text-4xl font-bold mb-2">西山興業赤坂ビル有料駐車場</h1>
+            <p class="text-lg text-blue-100">Nishiyama Kogyo Akasaka Building Paid Parking</p>
+            <div class="text-center mt-4">
+                <i class="fas fa-map-marker-alt mr-2"></i>
+                <span>東京都港区赤坂2-15-18 西山興業赤坂ビル<br>Nishiyama Kogyo Akasaka Building, 2-15-18 Akasaka, Minato-ku, Tokyo</span>
+            </div>
+        </div>
+    </header>
+
+    <div class="container mx-auto px-4 py-8">
+        <!-- Manual Input Section -->
+        <div class="parking-card mb-8">
+            <h2 class="text-2xl font-bold mb-4 flex items-center">
+                <i class="fas fa-keyboard mr-3"></i>
+                <span>日時を手入力 / Manual Time Entry</span>
+            </h2>
+            <div class="grid md:grid-cols-2 gap-6">
+                <div>
+                    <form id="manualEntryForm">
+                        <div class="mb-4">
+                            <label for="manualDate" class="block font-semibold mb-2">入庫日 / Entry Date</label>
+                            <input type="date" id="manualDate" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                        </div>
+                        <div class="mb-6">
+                            <label for="manualTime" class="block font-semibold mb-2">入庫時間 / Entry Time</label>
+                            <input type="time" id="manualTime" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                        </div>
+                        <button type="submit" id="calculateBtn" class="w-full bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 transition flex items-center justify-center">
+                            <i class="fas fa-calculator mr-2"></i><span>料金を計算 / Calculate Fee</span>
+                        </button>
+                    </form>
+                </div>
+                <!-- /Input View -->
+
+                <div class="bg-white bg-opacity-20 rounded-lg p-4">
+                    <h3 class="font-bold mb-3">駐車券情報 / Ticket Information</h3>
+                    <div class="space-y-2">
+                        <div class="flex justify-between">
+                            <span>入庫日 / Entry Date:</span>
+                            <span id="entryDate">----/--/--</span>
+                        </div>
+                         <div class="flex justify-between">
+                            <span>入庫時間 / Entry Time:</span>
+                            <span id="entryTime">--:--</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>曜日区分 / Day Type:</span>
+                            <span id="dayType">---</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>現在時間 / Current Time:</span>
+                            <span id="currentTime">--:--</span>
+                        </div>
+                        <div class="border-t pt-2 mt-3">
+                            <div class="flex justify-between font-bold text-lg">
+                                <span>概算料金 / Estimated Fee:</span>
+                                <span id="estimatedFee" class="text-yellow-300">¥---</span>
+                            </div>
+                            <p class="text-xs mt-1 text-blue-200">※実際の料金と異なる場合があります<br>*The actual fee may differ.</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- /Ticket Info -->
+            </div>
+        </div>
+        <!-- /Manual Input Section -->
+
+        <!-- Rate Table -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+            <h2 class="text-2xl font-bold mb-6 text-center text-gray-800">料金表 / Parking Rates</h2>
+            <div class="grid md:grid-cols-2 gap-4">
+                <div class="rate-card p-4 rounded-lg shadow">
+                    <h3 class="font-bold text-lg mb-3 text-blue-600">平日料金 / Weekdays</h3>
+                    <div class="space-y-2">
+                        <div class="flex justify-between"><span>06:00 - 21:00</span><span class="font-bold">15分 ¥300 / ¥300 per 15 min</span></div>
+                        <div class="flex justify-between"><span>21:00 - 06:00</span><span class="font-bold">15分 ¥300 / ¥300 per 15 min</span></div>
+                        <div class="flex justify-between text-red-600"><span>夜間最大料金 / Night Max Rate</span><span class="font-bold">¥1,800</span></div>
+                    </div>
+                </div>
+                <div class="rate-card p-4 rounded-lg shadow">
+                    <h3 class="font-bold text-lg mb-3 text-green-600">土日祝料金 / Weekends & Holidays</h3>
+                    <div class="space-y-2">
+                        <div class="flex justify-between"><span>06:00 - 21:00</span><span class="font-bold">15分 ¥200 / ¥200 per 15 min</span></div>
+                        <div class="flex justify-between"><span>21:00 - 06:00</span><span class="font-bold">15分 ¥200 / ¥200 per 15 min</span></div>
+                        <div class="flex justify-between text-red-600"><span>夜間最大料金 / Night Max Rate</span><span class="font-bold">¥1,800</span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-4 p-4 bg-yellow-50 rounded-lg border-l-4 border-yellow-400">
+                <p class="text-sm text-gray-700">※夜間最大料金は21:00-6:00の利用時のみ適用。超過時は通常料金が加算されます。<br>*Night max rate applies only for use between 21:00-6:00. Regular fees apply for overtime.</p>
+            </div>
+        </div>
+
+        <!-- Usage Instructions -->
+        <div class="grid md:grid-cols-2 gap-8 mb-8">
+            <div id="entryProcess" class="bg-white rounded-lg shadow-lg p-6">
+                <!-- この中身はJSで動的に生成されます -->
+            </div>
+            <div id="exitProcess" class="bg-white rounded-lg shadow-lg p-6">
+                <!-- この中身はJSで動的に生成されます -->
+            </div>
+        </div>
+
+        <!-- ▼▼▼ ここからが変更された部分 ▼▼▼ -->
+        <!-- Contact with Address Copy -->
+        <div class="bg-white rounded-lg shadow-lg p-6">
+            <h3 class="text-xl font-bold mb-4 text-gray-800 flex items-center">
+                <i class="fas fa-map-marker-alt mr-3"></i><span>所在地・お問い合わせ / Location & Contact</span>
+            </h3>
+            <div class="space-y-4">
+                <div>
+                    <h4 class="font-semibold mb-2">住所 / Address</h4>
+                    <div class="p-4 bg-gray-50 rounded-lg border">
+                        <!-- Japanese Address -->
+                        <div class="flex items-start justify-between mb-3">
+                            <div>
+                                <p class="text-gray-800 font-semibold">日本語 / Japanese:</p>
+                                <p class="text-gray-700 leading-relaxed">
+                                    〒107-0052<br>東京都港区赤坂2-15-18 西山興業赤坂ビル
+                                </p>
+                            </div>
+                            <button id="copyAddressJaBtn" class="ml-4 p-2 rounded-md text-gray-500 hover:bg-gray-200 hover:text-gray-800 transition flex-shrink-0" title="日本語住所をコピー / Copy Japanese Address">
+                                <span class="text-xs mr-1 font-semibold">JP</span><i class="far fa-copy text-lg"></i>
+                            </button>
+                        </div>
+                        <!-- English Address -->
+                        <div class="flex items-start justify-between border-t border-gray-200 pt-3">
+                            <div>
+                                <p class="text-gray-800 font-semibold">English:</p>
+                                <p class="text-gray-700 leading-relaxed">
+                                    Nishiyama Kogyo Akasaka Bldg.<br>2-15-18 Akasaka, Minato-ku,<br>Tokyo 107-0052, Japan
+                                </p>
+                            </div>
+                            <button id="copyAddressEnBtn" class="ml-4 p-2 rounded-md text-gray-500 hover:bg-gray-200 hover:text-gray-800 transition flex-shrink-0" title="英語住所をコピー / Copy English Address">
+                                <span class="text-xs mr-1 font-semibold">EN</span><i class="far fa-copy text-lg"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <p id="copyFeedback" class="text-green-600 text-sm mt-2 h-5 text-right"></p>
+                </div>
+                <!-- ▲▲▲ ここまでが変更された部分 ▲▲▲ -->
+                <div>
+                    <h4 class="font-semibold mb-2">お支払い方法 / Payment Methods</h4>
+                    <p class="text-gray-600">現金のみ（日本円）<br>Cash only (JPY)</p>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-2">ご注意 / Please Note</h4>
+                    <p class="text-gray-600 text-sm">料金計算には時間のラグが発生する場合があり、実際の料金と多少異なる場合がございます。<br>There may be a slight difference from the actual fee due to time lags in calculation.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-6 mt-12">
+        <div class="container mx-auto px-4 text-center">
+            <p>© <span id="copyright-year">2024</span> 西山興業赤坂ビル有料駐車場 | Nishiyama Kogyo Akasaka Building Paid Parking. All rights reserved.</p>
+        </div>
+    </footer>
+    
+    <!-- Custom JavaScript -->
+    <script src="js/script.js" defer></script>
+</body>
+</html>
