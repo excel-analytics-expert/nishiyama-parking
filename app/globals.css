@@ -4,15 +4,73 @@
 
 :root {
   --font-noto-sans-jp: 'Noto Sans JP', sans-serif;
+  --font-noto-serif-jp: 'Noto Serif JP', serif;
 }
 
 @layer base {
   html {
     @apply antialiased;
+    scroll-behavior: smooth;
   }
   
   body {
-    @apply bg-slate-900 text-slate-50;
+    @apply bg-slate-50 text-slate-800;
     font-family: var(--font-noto-sans-jp);
+    font-feature-settings: 'palt' 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* 見出しと金額表示に明朝体を適用 */
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-noto-serif-jp);
+    @apply font-light tracking-tight;
+    letter-spacing: -0.02em;
+  }
+
+  /* 金額表示用のクラス */
+  .price-display {
+    font-family: var(--font-noto-serif-jp);
+    @apply font-light;
+  }
+
+  /* 日本語フォントの最適化 */
+  p, span, div {
+    letter-spacing: 0.01em;
+  }
+}
+
+@layer utilities {
+  /* カスタムスクロールバー */
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    @apply bg-slate-100;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    @apply bg-slate-300 rounded-full;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    @apply bg-slate-400;
+  }
+
+  /* ゴールドグラデーション */
+  .gold-gradient {
+    background: linear-gradient(135deg, #c5a059 0%, #d4af37 50%, #c5a059 100%);
+  }
+
+  .gold-gradient:hover {
+    background: linear-gradient(135deg, #d4af37 0%, #e5c158 50%, #d4af37 100%);
+    box-shadow: 0 4px 20px rgba(212, 175, 55, 0.3);
+  }
+
+  /* Radial Gradient ユーティリティ */
+  .bg-gradient-radial {
+    background: radial-gradient(circle, var(--tw-gradient-stops));
   }
 }

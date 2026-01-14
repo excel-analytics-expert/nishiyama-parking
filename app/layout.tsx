@@ -1,11 +1,21 @@
-import type { Metadata } from 'next'
-import { Noto_Sans_JP } from 'next/font/google'
+import type { Metadata, Viewport } from 'next'
+import type { ReactNode } from 'react'
+import { Noto_Sans_JP, Noto_Serif_JP } from 'next/font/google'
+import { LanguageProvider } from '@/lib/LanguageContext'
+import Header from '@/components/Header'
 import './globals.css'
 
 const notoSansJP = Noto_Sans_JP({
   subsets: ['latin'],
   weight: ['300', '400', '500', '600', '700'],
   variable: '--font-noto-sans-jp',
+  display: 'swap',
+})
+
+const notoSerifJP = Noto_Serif_JP({
+  subsets: ['latin'],
+  weight: ['300', '400', '500', '600', '700'],
+  variable: '--font-noto-serif-jp',
   display: 'swap',
 })
 
@@ -35,15 +45,6 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
-  viewport: {
-    width: 'device-width',
-    initialScale: 1,
-    maximumScale: 5,
-  },
-  themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#0a1c2e' },
-    { media: '(prefers-color-scheme: dark)', color: '#0a1c2e' },
-  ],
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://parking.nishiyama-kogyo.example.com'),
   alternates: {
     canonical: '/',
@@ -61,7 +62,7 @@ export const metadata: Metadata = {
     description: '東京都港区赤坂2-15-18にある西山興業赤坂ビル有料駐車場の料金表・料金シミュレーター・所在地情報。平日・土日祝の料金体系、夜間最大料金、利用方法をご案内。',
     images: [
       {
-        url: '/og-image.jpg', // OGP画像のパス（後で追加可能）
+        url: '/og-image.jpg',
         width: 1200,
         height: 630,
         alt: '西山興業赤坂ビル有料駐車場',
@@ -91,12 +92,14 @@ export const metadata: Metadata = {
   },
 }
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
-  // 構造化データ（JSON-LD）
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
+  themeColor: '#0f172a',
+}
+
+export default function RootLayout({ children }: { children: ReactNode }) {
   const structuredData = {
     '@context': 'https://schema.org',
     '@type': 'ParkingFacility',
@@ -112,7 +115,7 @@ export default function RootLayout({
     },
     geo: {
       '@type': 'GeoCoordinates',
-      latitude: 35.6744, // 赤坂エリアの概算座標（実際の座標に置き換えてください）
+      latitude: 35.6744,
       longitude: 139.7375,
     },
     paymentAccepted: 'Cash',
@@ -121,9 +124,8 @@ export default function RootLayout({
   }
 
   return (
-    <html lang="ja" className={notoSansJP.variable}>
+    <html lang="ja" className={`${notoSansJP.variable} ${notoSerifJP.variable}`}>
       <head>
-        {/* 構造化データ（JSON-LD） */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -132,7 +134,10 @@ export default function RootLayout({
         />
       </head>
       <body className={notoSansJP.className}>
-        {children}
+        <LanguageProvider>
+          <Header />
+          {children}
+        </LanguageProvider>
       </body>
     </html>
   )
