@@ -1,144 +1,58 @@
-'use client';
-
-import { useState } from 'react';
-import { useLanguage } from '@/lib/LanguageContext';
-import LanguageSwitcher from '@/components/LanguageSwitcher';
+"use client";
+import React, { useState } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { Home, Building2, MapPin, BookOpen, Menu, X } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useLanguage } from '@/lib/LanguageContext';
+import { translations } from '@/lib/translations';
+import LanguageSwitcher from './LanguageSwitcher';
+import { Menu, X } from 'lucide-react'; // Assuming lucide-react is available, or remove icons if not
 
 export default function Header() {
-  const { t } = useLanguage();
-  const pathname = usePathname();
+  const { language } = useLanguage();
+  const t = translations[language].nav;
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const navItems = [
-    { href: '/', label: 'ホーム', icon: Home, key: 'home' },
-    { href: '/guide', label: '利用方法', icon: BookOpen, key: 'guide' },
-    { href: '/tenants', label: '提携テナント', icon: Building2, key: 'tenants' },
-    { href: '/#access', label: 'アクセス', icon: MapPin, key: 'access' },
-  ];
-
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
-
-  const closeMenu = () => {
-    setIsMenuOpen(false);
-  };
-
   return (
-    <header className="bg-gradient-to-b from-slate-900 to-slate-800 text-white sticky top-0 z-50 shadow-lg">
+    <header className="fixed w-full bg-slate-900/95 backdrop-blur-sm shadow-lg z-50 transition-all duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16 md:h-20">
-          {/* ロゴ */}
-          <Link 
-            href="/" 
-            className="flex items-center space-x-3 hover:opacity-90 transition-opacity"
-            onClick={closeMenu}
-          >
-            <div>
-              <h1 className="text-base md:text-lg font-semibold tracking-tight text-white">
-                {t.header.title}
-              </h1>
-              <p className="text-xs text-slate-400 hidden sm:block">
-                {t.header.subtitle}
-              </p>
-            </div>
+        <div className="flex justify-between items-center h-20">
+          <Link href="/" className="flex items-center">
+            <span className="text-white text-xl font-serif font-bold tracking-wider">西山興業赤坂ビル駐車場</span>
           </Link>
 
-          {/* PC用ナビゲーション */}
-          <nav className="hidden md:flex items-center space-x-1 lg:space-x-4">
-            {navItems.map((item) => {
-              const Icon = item.icon;
-              const isActive = pathname === item.href || (item.href === '/#access' && pathname === '/');
-              return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className={`flex items-center space-x-1 px-3 lg:px-4 py-2 text-sm font-medium transition-colors rounded-md ${
-                    isActive
-                      ? 'bg-[#b49856] text-white'
-                      : 'text-slate-300 hover:text-white hover:bg-slate-800'
-                  }`}
-                >
-                  <Icon className="h-4 w-4" />
-                  <span>{item.label}</span>
-                </Link>
-              );
-            })}
-            <div className="ml-2 pl-2 border-l border-slate-700">
+          {/* PC Menu */}
+          <nav className="hidden md:flex space-x-6 items-center">
+            <Link href="/" className="text-slate-300 hover:text-amber-400 transition-colors text-sm font-medium tracking-wide">{t.home}</Link>
+            <Link href="/guide" className="text-slate-300 hover:text-amber-400 transition-colors text-sm font-medium tracking-wide">{t.guide}</Link>
+            <Link href="/manual" className="text-slate-300 hover:text-amber-400 transition-colors text-sm font-medium tracking-wide">{t.manual}</Link>
+            <Link href="/tenants" className="text-slate-300 hover:text-amber-400 transition-colors text-sm font-medium tracking-wide">{t.tenants}</Link>
+            <Link href="/access" className="text-slate-300 hover:text-amber-400 transition-colors text-sm font-medium tracking-wide">{t.access}</Link>
+            <div className="ml-4 border-l border-slate-700 pl-4">
               <LanguageSwitcher />
             </div>
           </nav>
 
-          {/* モバイル用ハンバーガーメニューボタン */}
-          <button
-            onClick={toggleMenu}
-            className="md:hidden p-2 rounded-md text-slate-300 hover:text-white hover:bg-slate-800 transition-colors"
-            aria-label="メニュー"
-          >
-            {isMenuOpen ? (
-              <X className="h-6 w-6" />
-            ) : (
-              <Menu className="h-6 w-6" />
-            )}
+          {/* Mobile Menu Button */}
+          <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="md:hidden text-white p-2">
+            {isMenuOpen ? "✕" : "☰"}
           </button>
         </div>
-      </div>
 
-      {/* モバイル用ドロワーメニュー */}
-      <AnimatePresence>
+        {/* Mobile Menu */}
         {isMenuOpen && (
-          <>
-            {/* オーバーレイ */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              className="fixed inset-0 bg-black/50 z-40 md:hidden"
-              onClick={closeMenu}
-            />
-            {/* ドロワー */}
-            <motion.div
-              initial={{ x: '100%' }}
-              animate={{ x: 0 }}
-              exit={{ x: '100%' }}
-              transition={{ type: 'tween', duration: 0.3 }}
-              className="fixed top-16 right-0 bottom-0 w-80 max-w-[85vw] bg-slate-900 shadow-xl z-50 md:hidden overflow-y-auto"
-            >
-              <div className="p-6 space-y-4">
-                {navItems.map((item) => {
-                  const Icon = item.icon;
-                  const isActive = pathname === item.href || (item.href === '/#access' && pathname === '/');
-                  return (
-                    <Link
-                      key={item.href}
-                      href={item.href}
-                      onClick={closeMenu}
-                      className={`flex items-center space-x-3 px-4 py-3 text-base font-medium transition-colors rounded-lg ${
-                        isActive
-                          ? 'bg-[#b49856] text-white'
-                          : 'text-slate-300 hover:text-white hover:bg-slate-800'
-                      }`}
-                    >
-                      <Icon className="h-5 w-5" />
-                      <span>{item.label}</span>
-                    </Link>
-                  );
-                })}
-                <div className="pt-4 border-t border-slate-700">
-                  <div className="px-4">
-                    <LanguageSwitcher />
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-          </>
+          <div className="md:hidden bg-slate-900 pb-4 border-t border-slate-800">
+            <nav className="flex flex-col space-y-2 pt-4">
+              <Link href="/" onClick={() => setIsMenuOpen(false)} className="text-slate-300 hover:text-amber-400 px-4 py-2 block">{t.home}</Link>
+              <Link href="/guide" onClick={() => setIsMenuOpen(false)} className="text-slate-300 hover:text-amber-400 px-4 py-2 block">{t.guide}</Link>
+              <Link href="/manual" onClick={() => setIsMenuOpen(false)} className="text-slate-300 hover:text-amber-400 px-4 py-2 block">{t.manual}</Link>
+              <Link href="/tenants" onClick={() => setIsMenuOpen(false)} className="text-slate-300 hover:text-amber-400 px-4 py-2 block">{t.tenants}</Link>
+              <Link href="/access" onClick={() => setIsMenuOpen(false)} className="text-slate-300 hover:text-amber-400 px-4 py-2 block">{t.access}</Link>
+            </nav>
+            <div className="mt-4 px-4">
+              <LanguageSwitcher />
+            </div>
+          </div>
         )}
-      </AnimatePresence>
+      </div>
     </header>
   );
 }
