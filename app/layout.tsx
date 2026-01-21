@@ -8,7 +8,7 @@ const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 const serif = Noto_Serif_JP({ weight: ['400', '700'], subsets: ['latin'], variable: '--font-serif' });
 
 export const metadata: Metadata = {
-  title: '西山興業赤坂ビル駐車場 (Preview)',
+  title: '西山興業赤坂ビル有料駐車場 (Preview)',
   description: '赤坂の中心で、安心と格式ある駐車体験を。',
   robots: {
     index: false,

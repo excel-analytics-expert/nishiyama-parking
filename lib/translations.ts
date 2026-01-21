@@ -12,7 +12,7 @@ export interface Tenant {
 export const translations = {
   ja: {
     nav: { home: "ホーム", guide: "利用方法", manual: "操作説明", tenants: "提携店舗", access: "アクセス" },
-    hero: { title: "西山興業赤坂ビル駐車場", subtitle: "赤坂の中心で、安心と格式ある駐車体験を。" },
+    hero: { title: "西山興業赤坂ビル有料駐車場", subtitle: "赤坂の中心で、安心と格式ある駐車体験を。" },
     guide: {
       title: "駐車場の利用手順",
       step1_title: "1. 入庫 (Entry)",
@@ -46,7 +46,7 @@ export const translations = {
   },
   en: {
     nav: { home: "Home", guide: "Guide", manual: "App Usage", tenants: "Tenants", access: "Access" },
-    hero: { title: "Nishiyama Kogyo Akasaka Parking", subtitle: "Experience premium parking in the heart of Akasaka." },
+    hero: { title: "Nishiyama Kogyo Akasaka Paid Parking", subtitle: "Experience premium parking in the heart of Akasaka." },
     guide: {
       title: "Parking Guide",
       step1_title: "1. Entry",
@@ -80,7 +80,7 @@ export const translations = {
   },
   zh: {
     nav: { home: "主页", guide: "使用指南", manual: "操作说明", tenants: "合作商铺", access: "交通" },
-    hero: { title: "西山兴业赤坂大厦停车场", subtitle: "在赤坂中心体验安全且高格调的停车服务。" },
+    hero: { title: "西山兴业赤坂大厦有偿停车场", subtitle: "在赤坂中心体验安全且高格调的停车服务。" },
     guide: {
       title: "停车场使用流程",
       step1_title: "1. 入库 (Entry)",
@@ -114,7 +114,7 @@ export const translations = {
   },
   ko: {
     nav: { home: "홈", guide: "이용 방법", manual: "앱 설명", tenants: "제휴 매장", access: "오시는 길" },
-    hero: { title: "니시야마 흥업 아카사카 빌딩 주차장", subtitle: "아카사카의 중심에서 안심할 수 있는 품격 있는 주차 경험을。" },
+    hero: { title: "니시야마 흥업 아카사카 빌딩 유료 주차장", subtitle: "아카사카의 중심에서 안심할 수 있는 품격 있는 주차 경험을。" },
     guide: {
       title: "주차장 이용 순서",
       step1_title: "1. 입차 (Entry)",

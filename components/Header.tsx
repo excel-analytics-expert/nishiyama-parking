@@ -16,7 +16,9 @@ export default function Header() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
           <Link href="/" className="flex items-center">
-            <span className="text-white text-xl font-serif font-bold tracking-wider">西山興業赤坂ビル駐車場</span>
+            <span className="text-white text-base sm:text-xl font-serif font-bold tracking-wider whitespace-nowrap overflow-hidden text-ellipsis max-w-[70vw] sm:max-w-none">
+              西山興業赤坂ビル有料駐車場
+            </span>
           </Link>
 
           {/* PC Menu */}
