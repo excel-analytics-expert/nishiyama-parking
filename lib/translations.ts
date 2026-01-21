@@ -39,9 +39,9 @@ export const translations = {
     },
     calculator: { title: "料金シミュレーション", tab_check: "今いくら？", tab_budget: "予算計算", placeholder_time: "入庫時間を入力", button_calc: "計算する", result: "現在の料金", currency: "円" },
     tenants_list: [
-      { id: "1", name: "レストラン 赤坂 雅", category: "日本料理", description: "旬の食材を使用した本格懐石料理。個室完備で接待にも最適です。", discount: "5,000円以上のご利用で2時間無料", image: "/images/tenant-restaurant.jpg" },
-      { id: "2", name: "アカサカ・メディカルクリニック", category: "クリニック", description: "内科・皮膚科・アレルギー科。最新の医療機器を備えた都心のクリニック。", discount: "診察・会計時に駐車券提示で1時間無料", image: "/images/tenant-clinic.jpg" },
-      { id: "3", name: "Fitness Club AXIS", category: "フィットネス", description: "24時間営業、最新マシン完備の会員制フィットネスクラブ。", discount: "会員様は最大3時間無料", image: "/images/tenant-gym.jpg" }
+      { id: "1", name: "NEXT Akasaka-Base (2F)", category: "コミュニティ・ジム", description: "「大人の部活」をコンセプトに、キックボクシングやヨガを楽しめるアットホームな空間。元王者による本格指導を仕事帰りに手ぶらで体験。", discount: "1時間無料サービス（受付にて駐車券をご提示ください）", image: "/images/tenants/next-akasaka-base.png" },
+      { id: "2", name: "うおバル アフロ (1F)", category: "シーフードバル", description: "鮮度抜群の魚介をリーズナブルに。名物「蟹のパスタ」や牡蠣料理が人気。カウンター席もあり、お一人様からカジュアルに楽しめます。", discount: "1時間無料サービス（3,000円以上のご利用）", image: "/images/tenants/uobal-afro.png" },
+      { id: "3", name: "中国料理 たけくま (1F)", category: "中国料理", description: "中国赤酢を活かした本格派. 芳醇な香りの「酸辣湯麺」や「担々麺」はリピーター続出の逸品。落ち着いた空間で上質なランチ・ディナーを。", discount: "1時間無料サービス（ランチ・ディナーご利用時）", image: "/images/tenants/takekuma.png" }
     ]
   },
   en: {
@@ -73,9 +73,9 @@ export const translations = {
     },
     calculator: { title: "Fee Simulator", tab_check: "Current Fee", tab_budget: "Budget Plan", placeholder_time: "Enter Entry Time", button_calc: "Calculate", result: "Current Charge", currency: "JPY" },
     tenants_list: [
-      { id: "1", name: "Restaurant Akasaka MIYABI", category: "Japanese Cuisine", description: "Authentic Kaiseki cuisine.", discount: "2 hours free > 5,000 JPY", image: "/images/tenant-restaurant.jpg" },
-      { id: "2", name: "Akasaka Medical Clinic", category: "Clinic", description: "Internal medicine, dermatology.", discount: "1 hour free with ticket", image: "/images/tenant-clinic.jpg" },
-      { id: "3", name: "Fitness Club AXIS", category: "Fitness", description: "24-hour members-only club.", discount: "Up to 3 hours free", image: "/images/tenant-gym.jpg" }
+      { id: "1", name: "NEXT Akasaka-Base (2F)", category: "Community & Gym", description: "A friendly space based on the concept of 'club activities for adults,' where you can enjoy kickboxing and yoga. Experience professional guidance from former champions empty-handed after work.", discount: "1-hour free (Show ticket at reception)", image: "/images/tenants/next-akasaka-base.png" },
+      { id: "2", name: "Uobar Afro (1F)", category: "Seafood Bar", description: "Fresh seafood at reasonable prices. The specialty 'Crab Pasta' and oyster dishes are popular. Counter seating available for solo diners.", discount: "1-hour free for 3,000+ JPY", image: "/images/tenants/uobal-afro.png" },
+      { id: "3", name: "Chinese Restaurant Takekuma (1F)", category: "Chinese Cuisine", description: "Authentic flavors using Chinese red vinegar. The fragrant 'Hot and Sour Noodles' and 'Dandan Noodles' keep regulars coming back. Enjoy high-quality lunch and dinner in a calm atmosphere.", discount: "1-hour free for lunch/dinner", image: "/images/tenants/takekuma.png" }
     ]
   },
   zh: {
@@ -107,9 +107,9 @@ export const translations = {
     },
     calculator: { title: "费用模拟", tab_check: "当前费用", tab_budget: "预算计算", placeholder_time: "输入入库时间", button_calc: "计算", result: "当前费用", currency: "日元" },
     tenants_list: [
-      { id: "1", name: "餐厅 赤坂 雅", category: "日本料理", description: "正宗怀石料理。", discount: "满5,000日元免2小时", image: "/images/tenant-restaurant.jpg" },
-      { id: "2", name: "Akasaka Medical Clinic", category: "Clinic", description: "内科、皮肤科、过敏科。配备最新医疗设备的市中心诊所。", discount: "就诊结账时出示停车券可免费1小时", image: "/images/tenant-clinic.jpg" },
-      { id: "3", name: "Fitness Club AXIS", category: "Fitness", description: "24小时营业，配备最新机器的会员制健身俱乐部。", discount: "会员最多免费3小时", image: "/images/tenant-gym.jpg" }
+      { id: "1", name: "NEXT Akasaka-Base (2F)", category: "社区健身房", description: "以“成人的部社活动”为理念，可以享受踢拳和瑜伽的温馨空间。下班后可空手体验前冠军的专业指导。", discount: "免费停车1小时（请在接待处出示停车券）", image: "/images/tenants/next-akasaka-base.png" },
+      { id: "2", name: "鱼吧 Afro (1F)", category: "海鲜酒吧", description: "价格实惠的极品海鲜。招牌“螃蟹面”和生蚝料理极具人气。设有柜台席位，独自一人也能轻松享受。", discount: "满3,000日元免费停车1小时", image: "/images/tenants/uobal-afro.png" },
+      { id: "3", name: "中国料理 竹隈 (1F)", category: "中国料理", description: "活用中国红醋的正宗派。香气浓郁的“酸辣汤面”和“担担面”拥有众多回头客。在安静的空间享受高品质的午餐和晚餐。", discount: "午餐/晚餐期间免费停车1小时", image: "/images/tenants/takekuma.png" }
     ]
   },
   ko: {
@@ -141,9 +141,9 @@ export const translations = {
     },
     calculator: { title: "요금 시뮬레이션", tab_check: "현재 요금", tab_budget: "예산 계산", placeholder_time: "입차 시간 입력", button_calc: "계산하기", result: "현재 요금", currency: "엔" },
     tenants_list: [
-      { id: "1", name: "레스토랑 아카사카 미야비", category: "일본 요리", description: "정통 가이세키 요리。", discount: "5,000엔 이상 2시간 무료", image: "/images/tenant-restaurant.jpg" },
-      { id: "2", name: "Akasaka Medical Clinic", category: "Clinic", description: "내과, 피부과, 알레르기과. 최신 의료 기기를 갖춘 도심 클리닉.", discount: "진찰 시 1시간 무료", image: "/images/tenant-clinic.jpg" },
-      { id: "3", name: "Fitness Club AXIS", category: "Fitness", description: "24시간 영업, 최신 머신 완비.", discount: "회원 최대 3시간 무료", image: "/images/tenant-gym.jpg" }
+      { id: "1", name: "NEXT Akasaka-Base (2F)", category: "커뮤니티 & 짐", description: "'어른들의 부활동'을 컨셉으로 킥복싱과 요가를 즐길 수 있는 아늑한 공간. 전 챔피언의 본격적인 지도를 퇴근 후 빈손으로 체험해 보세요.", discount: "1시간 무료 서비스 (접수 시 주차권 제시)", image: "/images/tenants/next-akasaka-base.png" },
+      { id: "2", name: "우오바루 아프로 (1F)", category: "씨푸드 바", description: "신선함이 뛰어난 해산물을 합리적인 가격에. 명물 '게 파스타'와 굴 요리가 인기. 카운터석도 있어 혼자서도 가볍게 즐길 수 있습니다.", discount: "3,000엔 이상 이용 시 1시간 무료", image: "/images/tenants/uobal-afro.png" },
+      { id: "3", name: "중국요리 다케쿠마 (1F)", category: "중국 요리", description: "중국 홍초를 활용한 본격파. 풍부한 향의 '산랏탕면'과 '탄탄면'은 단골이 끊이지 않는 일품. 차분한 공간에서 품격 있는 런치와 디너를 즐겨보세요.", discount: "런치/디너 이용 시 1시간 무료", image: "/images/tenants/takekuma.png" }
     ]
   }
 };
