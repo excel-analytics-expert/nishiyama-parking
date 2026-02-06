@@ -7,9 +7,28 @@ export default function TenantsPage() {
   const { language } = useLanguage();
   const t = translations[language];
 
+  const [currentImageIndices, setCurrentImageIndices] = React.useState<{ [key: string]: number }>({});
+
+  React.useEffect(() => {
+    const timers = t.tenants_list.map((tenant) => {
+      const allImages = [tenant.image, ...(tenant.additionalImages || [])];
+      if (allImages.length > 1) {
+        return setInterval(() => {
+          setCurrentImageIndices((prev) => ({
+            ...prev,
+            [tenant.id]: ((prev[tenant.id] || 0) + 1) % allImages.length,
+          }));
+        }, 3000);
+      }
+      return null;
+    });
+
+    return () => timers.forEach((timer) => timer && clearInterval(timer));
+  }, [t.tenants_list]);
+
   return (
     <div
-      className="min-h-screen bg-slate-50 text-slate-800 pt-20 select-none"
+      className="min-h-screen bg-slate-50 text-slate-800 pt-20 select-none transition-all duration-500"
       onContextMenu={(e) => e.preventDefault()}
     >
       <div className="bg-slate-900 py-16 px-4 sm:px-6 lg:px-8 shadow-md">
@@ -30,39 +49,20 @@ export default function TenantsPage() {
                   : "bg-white shadow-lg hover:shadow-2xl border-slate-100"
                   }`}
               >
-                <div className="relative w-full h-64 bg-slate-200 overflow-hidden">
-                  <img
-                    src={tenant.image}
-                    alt={tenant.name}
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 pointer-events-none"
-                  />
+                <div className="relative w-full h-72 bg-slate-900 overflow-hidden">
+                  {[tenant.image, ...(tenant.additionalImages || [])].map((img, idx) => (
+                    <img
+                      key={img}
+                      src={img}
+                      alt={tenant.name}
+                      className={`absolute inset-0 w-full h-full transition-opacity duration-1000 ${isHighlight ? "object-contain bg-[#d7384a]" : "object-cover"} ${currentImageIndices[tenant.id] === idx || (!currentImageIndices[tenant.id] && idx === 0)
+                        ? "opacity-100"
+                        : "opacity-0"
+                        } pointer-events-none`}
+                    />
+                  ))}
 
-                  {/* Styled Tenant Name Overlay */}
-                  <div className="absolute inset-0 flex items-center justify-center p-4">
-                    {tenant.id === "1" && (
-                      <span className="text-3xl font-black text-white drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)] tracking-tighter uppercase italic border-y-2 border-white px-4 py-1 transform -rotate-2">
-                        {tenant.name.split('(')[0]}
-                      </span>
-                    )}
-                    {tenant.id === "2" && (
-                      <span className="text-4xl font-black text-amber-400 drop-shadow-[0_3px_0_rgba(234,88,12,1)] tracking-tight font-sans rounded-lg bg-white/10 backdrop-blur-xs px-4 py-1">
-                        {tenant.name.split('(')[0]}
-                      </span>
-                    )}
-                    {tenant.id === "3" && (
-                      <span className="text-3xl font-serif font-bold text-[#ffd700] drop-shadow-[0_2px_4px_rgba(153,0,0,0.8)] border-b border-[#ffd700]">
-                        {tenant.name.split('(')[0]}
-                      </span>
-                    )}
-                  </div>
-
-                  {/* DEMO Watermark */}
-                  <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none opacity-40 overflow-hidden">
-                    <span className="text-5xl font-sans font-black tracking-[0.2em] rotate-[-25deg] border-[12px] border-white text-white px-8 py-2 whitespace-nowrap scale-150 drop-shadow-lg">
-                      SAMPLE / DEMO
-                    </span>
-                  </div>
-
+                  {/* Badge Overlay (Category & Pick Up) */}
                   <div className="absolute top-4 left-4 flex flex-col gap-2">
                     <div className="bg-slate-900/80 backdrop-blur-sm text-amber-400 text-xs px-3 py-1 rounded-full uppercase tracking-wider font-semibold border border-amber-500/30">
                       {tenant.category}
@@ -75,10 +75,10 @@ export default function TenantsPage() {
                   </div>
                 </div>
                 <div className="p-6 flex flex-col flex-1">
-                  <h3 className="text-xl font-serif font-bold text-slate-900 group-hover:text-amber-600 transition-colors mb-2">
+                  <h3 className={`text-xl font-serif font-bold mb-2 transition-colors ${isHighlight ? "text-amber-600 scale-105 origin-left" : "text-slate-900 group-hover:text-amber-600"}`}>
                     {tenant.name}
                   </h3>
-                  <p className="text-sm text-slate-600 leading-relaxed mb-6 flex-1 whitespace-pre-wrap">
+                  <p className={`text-sm leading-relaxed mb-6 flex-1 whitespace-pre-wrap ${isHighlight ? "text-slate-700 font-medium" : "text-slate-600"}`}>
                     {tenant.description}
                   </p>
 
