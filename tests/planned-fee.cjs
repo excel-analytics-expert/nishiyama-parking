@@ -80,6 +80,54 @@ test('Friday-to-Saturday rate switches within the same capped night', () => {
   assert.equal(p.el('plannedFee').textContent, '¥1,000');
 });
 
+test('weekday holidays, citizens holidays, and substitute holidays receive the holiday rate', () => {
+  for (const day of ['2026-10-12', '2026-09-22', '2026-05-06', '2027-03-22']) {
+    const p = page(day + 'T10:15:00+09:00');
+    p.plan(day + 'T10:00', day + 'T10:30');
+    assert.equal(p.el('plannedFee').textContent, '¥400');
+  }
+});
+
+test('Japan time and fees are unchanged across device time zones including DST', () => {
+  const original = process.env.TZ;
+  try {
+    for (const zone of ['UTC', 'America/New_York', 'Pacific/Honolulu', 'Asia/Tokyo']) {
+      process.env.TZ = zone;
+      const p = page('2026-10-07T10:15:00+09:00');
+      p.plan('2026-10-07T10:00', '2026-10-07T11:00');
+      assert.equal(p.el('plannedFee').textContent, '¥1,200');
+      p.el('manualEntryForm').dispatch('submit');
+      assert.equal(p.el('entryTime').textContent, '10:00');
+      assert.equal(p.el('currentTime').textContent, '2026-10-07 10:15');
+      const night = page('2026-10-31T21:05:00+09:00');
+      night.plan('2026-10-31T21:00', '2026-11-01T06:00');
+      assert.equal(night.el('plannedFee').textContent, '¥1,800');
+    }
+  } finally { process.env.TZ = original; }
+});
+
+test('unpublished holiday years never produce an unverified amount', () => {
+  const p = page('2026-10-07T10:15:00+09:00');
+  p.plan('2026-10-07T10:00', '2028-01-01T12:00');
+  assert.equal(p.el('plannedFee').textContent, '¥---');
+  assert.match(p.el('plannedFeeError').textContent, /Holiday rates/);
+});
+
+test('full entry and exit instructions retain the operational sequence in both languages', () => {
+  const p = page();
+  const entry = p.el('entryProcess').innerHTML;
+  const exit = p.el('exitProcess').innerHTML;
+  assert.match(entry, /駐車券/); assert.match(entry, /parking ticket/);
+  assert.match(entry, /出庫予定日時/); assert.match(entry, /planned departure/);
+  assert.equal((entry.match(/<li>/g) || []).length, 4);
+  assert.equal((exit.match(/<li>/g) || []).length, 6);
+  assert.ok(exit.indexOf('Cash only') < exit.indexOf('reverse your vehicle'));
+  assert.ok(exit.indexOf('reverse your vehicle') < exit.indexOf('stationary'));
+  assert.ok(exit.indexOf('stationary') < exit.indexOf('turntable has stopped'));
+  assert.match(exit, /停止の合図/); assert.match(exit, /signals you to stop/);
+  assert.match(exit, /歩行者/); assert.match(exit, /pedestrians/);
+});
+
 test('Next.js fee calculation agrees with the static form at night boundaries', () => {
   const ts = require('typescript');
   const code = ts.transpileModule(fs.readFileSync(path.join(__dirname, '../lib/parkingLogic.ts'), 'utf8'), {

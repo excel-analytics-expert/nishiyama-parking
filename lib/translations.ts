@@ -17,16 +17,16 @@ export const translations = {
     guide: {
       title: "駐車場の利用手順",
       step1_title: "1. 入庫 (Entry)",
-      step1_desc: "車両入庫後に管理人から駐車券を受け取ってください。（管理人は多言語に対応しておりません）",
+      step1_desc: "車両入庫後、管理人から駐車券を受け取り、大切に保管してください。管理人は多言語対応していないため、利用方法はこのページでご確認ください。",
       step2_title: "2. 出庫準備 (Payment)",
       step2_desc: "管理人に駐車券を渡し、料金をお支払いください。日本円・現金のみ対応しています。",
       step3_title: "3. 出庫 (Exit)",
-      step3_desc: "管理人の誘導に従い、後方の回転盤（ターンテーブル）まで後退してください。回転後、安全に出庫してください。"
+      step3_desc: "管理人の案内に従い、慎重に後退して後方の回転盤まで進んでください。停止の合図で停車し、回転中は車を動かさずお待ちください。回転盤の停止を確認し、管理人の案内に従って出庫してください。公道に出る際は歩行者に注意してください。"
     },
     manual: {
       title: "アプリ操作説明",
       calc_title: "料金シミュレーション",
-      calc_desc: "ホーム画面の「今いくら？」タブに駐車券の入庫日時を入力すると、現在の概算料金が表示されます。「予算計算」タブでは出庫予定日時に対する料金も計算可能です。",
+      calc_desc: "ホーム画面の「今いくら？」タブに駐車券の入庫日時を入力すると、現在の概算料金が表示されます。「何時までならいくら？」タブでは、出庫予定日時までの合計目安を確認できます。実際の精算は管理人にご確認ください。",
       tenant_title: "提携店舗の検索",
       tenant_desc: "「提携店舗」メニューでは、駐車料金割引サービスのある店舗を確認できます。各店舗の詳細や割引条件をご覧いただけます。",
       access_title: "アクセス情報の活用",
@@ -38,7 +38,7 @@ export const translations = {
       copy_btn: "住所をコピー", copy_done: "コピーしました！",
       map_title: "Googleマップ"
     },
-    calculator: { title: "料金シミュレーション", tab_check: "今いくら？", tab_budget: "何時までならいくら？", placeholder_time: "入庫時間を入力", button_calc: "計算する", result: "現在の料金目安", currency: "円", entry_date: "入庫日", entry_time: "入庫時間", exit_date: "出庫予定日", exit_time: "何時まで利用するか", planned_result: "予定時刻までの合計目安", planned_until: "この日時まで利用した場合の料金目安", planned_error: "入庫は現在以前、出庫予定は現在以降かつ入庫より後の日時にしてください。", estimate_note: "入庫からの合計目安です。実際の精算額は管理人にご確認ください。祝日判定は未対応のため、平日の祝日は目安が異なる場合があります。" },
+    calculator: { title: "料金シミュレーション", tab_check: "今いくら？", tab_budget: "何時までならいくら？", placeholder_time: "入庫時間を入力", button_calc: "計算する", result: "現在の料金目安", currency: "円", entry_date: "入庫日", entry_time: "入庫時間", exit_date: "出庫予定日", exit_time: "何時まで利用するか", planned_result: "予定時刻までの合計目安", planned_until: "この日時まで利用した場合の料金目安", planned_error: "入庫は現在以前、出庫予定は現在以降かつ入庫より後の日時にしてください。", estimate_note: "入庫からの合計目安です。実際の精算額は管理人にご確認ください。公表済みの祝日・休日は2027年まで対応しています。", time_zone: "日時は日本時間（JST）で入力してください。" },
     tenants_list: [
       { id: "1", name: "NEXT Akasaka-Base (2F)", category: "コミュニティ・ジム", description: "「大人の部活」をコンセプトに、キックボクシングやヨガを楽しめるアットホームな空間。元王者による本格指導を仕事帰りに手ぶらで体験。", discount: "1時間無料サービス（受付にて駐車券をご提示ください）", image: "/images/tenants/next-akasaka-poster.jpg" },
       { id: "2", name: "うおバル アフロ (1F)", category: "シーフードバル", description: "鮮度抜群の魚介をリーズナブルに。名物「蟹のパスタ」や牡蠣料理が人気。カウンター席もあり、お一人様からカジュアルに楽しめます。", discount: "1時間無料サービス（3,000円以上のご利用）", image: "/images/tenants/uobar-food.jpg", additionalImages: ["/images/tenants/uobar-interior.jpg", "/images/tenants/uobar-logo.jpg"] },
@@ -51,16 +51,16 @@ export const translations = {
     guide: {
       title: "Parking Guide",
       step1_title: "1. Entry",
-      step1_desc: "Receive a parking ticket from the attendant after parking. (The attendant may not speak multiple languages.)",
+      step1_desc: "After parking, receive a ticket from the attendant and keep it safe. Multilingual assistance is not available from the attendant; please refer to this page.",
       step2_title: "2. Payment",
       step2_desc: "Give your ticket to the attendant and pay the fee. Cash only (JPY).",
       step3_title: "3. Exit",
-      step3_desc: "Reverse to the turntable at the rear under the attendant's guidance. Exit carefully after rotation."
+      step3_desc: "Following the attendant's instructions, carefully reverse onto the turntable at the rear. Stop when signalled and keep your vehicle stationary while it rotates. Once the turntable has stopped, leave as directed by the attendant. Watch for pedestrians when entering the public road."
     },
     manual: {
       title: "App Usage",
       calc_title: "Fee Simulation",
-      calc_desc: "Enter your entry time in the 'Current Fee' tab on the Home screen to check the estimated fee. Use 'Budget Plan' to calculate for a future exit time.",
+      calc_desc: "Enter your entry time in the 'Current Fee' tab on the Home screen to check the estimated fee. Use 'Fee by departure time' to estimate the total up to your planned departure. Confirm the actual payment with the attendant.",
       tenant_title: "Find Tenants",
       tenant_desc: "Check the 'Tenants' menu for shops offering parking discounts. You can view details and discount conditions for each shop.",
       access_title: "Access Info",
@@ -72,7 +72,7 @@ export const translations = {
       copy_btn: "Copy Address", copy_done: "Copied!",
       map_title: "Google Map"
     },
-    calculator: { title: "Fee Simulator", tab_check: "Current Fee", tab_budget: "Fee by departure time", placeholder_time: "Enter Entry Time", button_calc: "Calculate", result: "Current estimated fee", currency: "JPY", entry_date: "Entry date", entry_time: "Entry time", exit_date: "Planned departure date", exit_time: "Planned departure time", planned_result: "Estimated total by departure", planned_until: "Estimated total if you leave at this date and time", planned_error: "Entry must not be in the future. Planned departure must be in the future and after entry.", estimate_note: "Estimated total from entry. Confirm the actual payment with the attendant. Public holidays are not detected; estimates on weekday holidays may differ." },
+    calculator: { title: "Fee Simulator", tab_check: "Current Fee", tab_budget: "Fee by departure time", placeholder_time: "Enter Entry Time", button_calc: "Calculate", result: "Current estimated fee", currency: "JPY", entry_date: "Entry date", entry_time: "Entry time", exit_date: "Planned departure date", exit_time: "Planned departure time", planned_result: "Estimated total by departure", planned_until: "Estimated total if you leave at this date and time", planned_error: "Entry must not be in the future. Planned departure must be in the future and after entry.", estimate_note: "Estimated total from entry. Confirm the actual payment with the attendant. Published Japanese public and substitute holidays are supported through 2027.", time_zone: "Enter all dates and times in Japan time (JST)." },
     tenants_list: [
       { id: "1", name: "NEXT Akasaka-Base (2F)", category: "Community & Gym", description: "A friendly space based on the concept of 'club activities for adults,' where you can enjoy kickboxing and yoga. Experience professional guidance from former champions empty-handed after work.", discount: "1-hour free (Show ticket at reception)", image: "/images/tenants/next-akasaka-poster.jpg" },
       { id: "2", name: "Uobar Afro (1F)", category: "Seafood Bar", description: "Fresh seafood at reasonable prices. The specialty 'Crab Pasta' and oyster dishes are popular. Counter seating available for solo diners.", discount: "1-hour free for 3,000+ JPY", image: "/images/tenants/uobar-food.jpg", additionalImages: ["/images/tenants/uobar-interior.jpg", "/images/tenants/uobar-logo.jpg"] },
@@ -106,7 +106,7 @@ export const translations = {
       copy_btn: "复制地址", copy_done: "已复制！",
       map_title: "谷歌地图"
     },
-    calculator: { title: "费用模拟", tab_check: "当前费用", tab_budget: "预算计算", placeholder_time: "输入入库时间", button_calc: "计算", result: "当前费用", currency: "日元", entry_date: "入库日期", entry_time: "入库时间", exit_date: "预计出库日期", exit_time: "预计出库时间", planned_result: "预计出库时的总费用", planned_until: "使用至此日期和时间的预计总费用", planned_error: "入库时间不能在未来。预计出库时间须在当前时间之后且晚于入库时间。", estimate_note: "这是从入库起的预计总费用。实际结算金额请向管理员确认。未检测法定节假日，工作日节假日的估算可能有差异。" },
+    calculator: { title: "费用模拟", tab_check: "当前费用", tab_budget: "预算计算", placeholder_time: "输入入库时间", button_calc: "计算", result: "当前费用", currency: "日元", entry_date: "入库日期", entry_time: "入库时间", exit_date: "预计出库日期", exit_time: "预计出库时间", planned_result: "预计出库时的总费用", planned_until: "使用至此日期和时间的预计总费用", planned_error: "入库时间不能在未来。预计出库时间须在当前时间之后且晚于入库时间。", estimate_note: "这是从入库起的预计总费用。实际结算金额请向管理员确认。支持截至2027年已公布的日本法定节假日及补休日。", time_zone: "请以日本时间（JST）输入日期和时间。" },
     tenants_list: [
       { id: "1", name: "NEXT Akasaka-Base (2F)", category: "社区健身房", description: "以“成人的部社活动”为理念，可以享受踢拳和瑜伽的温馨空间。下班后可空手体验前冠军的专业指导。", discount: "免费停车1小时（请在接待处出示停车券）", image: "/images/tenants/next-akasaka-poster.jpg" },
       { id: "2", name: "鱼吧 Afro (1F)", category: "海鲜酒吧", description: "价格实惠的极品海鮮。招牌“螃蟹面”和生蚝料理极具人气。设有柜台席位，独自一人也能轻松享受。", discount: "满3,000日元免费停车1小时", image: "/images/tenants/uobar-food.jpg", additionalImages: ["/images/tenants/uobar-interior.jpg", "/images/tenants/uobar-logo.jpg"] },
@@ -140,7 +140,7 @@ export const translations = {
       copy_btn: "주소 복사", copy_done: "복사되었습니다!",
       map_title: "구글 지도"
     },
-    calculator: { title: "요금 시뮬레이션", tab_check: "현재 요금", tab_budget: "예산 계산", placeholder_time: "입차 시간 입력", button_calc: "계산하기", result: "현재 요금", currency: "엔", entry_date: "입차 날짜", entry_time: "입차 시간", exit_date: "출차 예정일", exit_time: "출차 예정 시간", planned_result: "출차 예정 시간까지의 예상 총요금", planned_until: "이 날짜와 시간까지 이용할 경우의 예상 총요금", planned_error: "입차 시간은 현재 이전이어야 합니다. 출차 예정은 현재 이후이며 입차보다 늦어야 합니다.", estimate_note: "입차부터의 예상 총요금입니다. 실제 정산 금액은 관리인에게 확인하세요. 공휴일을 판별하지 않아 평일 공휴일의 예상 요금은 다를 수 있습니다." },
+    calculator: { title: "요금 시뮬레이션", tab_check: "현재 요금", tab_budget: "예산 계산", placeholder_time: "입차 시간 입력", button_calc: "계산하기", result: "현재 요금", currency: "엔", entry_date: "입차 날짜", entry_time: "입차 시간", exit_date: "출차 예정일", exit_time: "출차 예정 시간", planned_result: "출차 예정 시간까지의 예상 총요금", planned_until: "이 날짜와 시간까지 이용할 경우의 예상 총요금", planned_error: "입차 시간은 현재 이전이어야 합니다. 출차 예정은 현재 이후이며 입차보다 늦어야 합니다.", estimate_note: "입차부터의 예상 총요금입니다. 실제 정산 금액은 관리인에게 확인하세요. 2027년까지 공표된 일본 공휴일과 대체휴일을 지원합니다.", time_zone: "날짜와 시간은 일본 시간(JST)으로 입력해 주세요." },
     tenants_list: [
       { id: "1", name: "NEXT Akasaka-Base (2F)", category: "커뮤니티 & 짐", description: "'어른들의 부활동'을 컨셉으로 킥복シング과 요가를 즐길 수 있는 아늑한 공간. 전 챔피언の 본격적인 지도를 퇴근 후 빈손으로 체험해 보세요.", discount: "1시간 무료 서비스 (접수 시 주차권 제시)", image: "/images/tenants/next-akasaka-poster.jpg" },
       { id: "2", name: "우오바루 아프로 (1F)", category: "씨푸드 바", description: "신선함이 뛰어난 해산물을 합리적인 가격에. 명물 '게 파스타'와 굴 요리가 인기. 카운터석도 있어 혼자서도 가볍게 즐길 수 있습니다.", discount: "3,000엔 이상 이용 시 1시간 무료", image: "/images/tenants/uobar-food.jpg", additionalImages: ["/images/tenants/uobar-interior.jpg", "/images/tenants/uobar-logo.jpg"] },

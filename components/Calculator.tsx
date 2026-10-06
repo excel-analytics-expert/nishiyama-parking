@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLanguage } from '@/lib/LanguageContext';
 import { translations } from '@/lib/translations';
-import { calculateFee } from '@/lib/parkingLogic';
+import { calculateFee, formatJapanDate, parseJapanTime } from '@/lib/parkingLogic';
 
 export default function Calculator() {
   const { language } = useLanguage();
@@ -27,24 +27,22 @@ export default function Calculator() {
   useEffect(() => {
     // Set default date to today for convenience
     const now = new Date();
-    const yyyy = now.getFullYear();
-    const mm = String(now.getMonth() + 1).padStart(2, '0');
-    const dd = String(now.getDate()).padStart(2, '0');
-    setEntryDate(`${yyyy}-${mm}-${dd}`);
-    setExitDate(`${yyyy}-${mm}-${dd}`);
+    const today = formatJapanDate(now);
+    setEntryDate(today);
+    setExitDate(today);
   }, []);
 
   const handleCalculate = () => {
     clearResult();
     if (!entryDate || !entryTime) return;
 
-    const start = new Date(`${entryDate}T${entryTime}`);
+    const start = parseJapanTime(entryDate, entryTime);
     const now = new Date();
     let end = now;
 
     if (activeTab === 'budget') {
       if (!exitDate || !exitTime) return;
-      end = new Date(`${exitDate}T${exitTime}`);
+      end = parseJapanTime(exitDate, exitTime);
     }
 
     if (isNaN(start.getTime()) || isNaN(end.getTime())) {
@@ -61,7 +59,9 @@ export default function Calculator() {
       return;
     }
 
-    const fee = calculateFee(start, end);
+    let fee;
+    try { fee = calculateFee(start, end); }
+    catch (error) { alert(error instanceof Error ? error.message : t.planned_error); return; }
     setResultEnd(activeTab === 'budget' ? `${exitDate} ${exitTime}` : '');
     setResultFee(fee);
   };
@@ -89,6 +89,7 @@ export default function Calculator() {
           {activeTab === 'check' ? t.tab_check : t.tab_budget}
         </h2>
 
+        <p className="text-xs text-slate-500 mb-3">{t.time_zone}</p>
         <div className="space-y-4">
           {/* Entry Date/Time */}
           <div className="grid grid-cols-2 gap-3">

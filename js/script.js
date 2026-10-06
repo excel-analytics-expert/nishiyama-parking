@@ -1,197 +1,203 @@
 document.addEventListener('DOMContentLoaded', () => {
+  // ===== 要素参照 =====
+  const manualEntryForm = document.getElementById('manualEntryForm');
+  const manualDateInput = document.getElementById('manualDate');
+  const manualTimeInput = document.getElementById('manualTime');
 
-    // --- グローバル変数とUI要素の取得 ---
-    const manualEntryForm = document.getElementById('manualEntryForm');
-    const manualDateInput = document.getElementById('manualDate');
-    const manualTimeInput = document.getElementById('manualTime');
-    // ▼▼▼ ここからが変更された部分 ▼▼▼
-    const copyAddressJaBtn = document.getElementById('copyAddressJaBtn');
-    const copyAddressEnBtn = document.getElementById('copyAddressEnBtn');
-    // ▲▲▲ ここまでが変更された部分 ▲▲▲
-    const copyFeedback = document.getElementById('copyFeedback');
+  const entryDateEl   = document.getElementById('entryDate');
+  const entryTimeEl   = document.getElementById('entryTime');
+  const dayTypeEl     = document.getElementById('dayType');
+  const currentTimeEl = document.getElementById('currentTime');
+  const estimatedFeeEl= document.getElementById('estimatedFee');
 
-    // --- 初期化処理 ---
-    const initializePage = () => {
-        // 入庫・出庫手順の表示
-        const entryProcessDiv = document.getElementById('entryProcess');
-        const exitProcessDiv = document.getElementById('exitProcess');
+  const entryProcessDiv = document.getElementById('entryProcess');
+  const exitProcessDiv  = document.getElementById('exitProcess');
 
-        if (entryProcessDiv) {
-            entryProcessDiv.innerHTML = `
-                <h3 class="text-xl font-bold mb-4 text-gray-800">入庫手順 / Entry Process</h3>
-                <ol class="list-decimal list-inside space-y-3 text-gray-700">
-                    <li>車両入庫後に管理人から駐車券を受け取ってください。<br><span class="text-sm text-gray-600">Please receive a parking ticket from the attendant after parking your vehicle.</span></li>
-                    <li>管理人は多言語に対応しておりません。こちらのサイト内でご確認ください。<br><span class="text-sm text-gray-600">The attendant does not speak multiple languages. Please check this site for information.</span></li>
-                    <li>駐車券は大切に保管してください。<br><span class="text-sm text-gray-600">Please keep your parking ticket in a safe place.</span></li>
-                    <li>駐車券に記載の入庫日時をこのページで入力すると、現在時の概算料金が確認できます。<br><span class="text-sm text-gray-600">You can check the current estimated fee by entering the entry date and time from your ticket on this page.</span></li>
-                </ol>
-            `;
-        }
-        if (exitProcessDiv) {
-            exitProcessDiv.innerHTML = `
-                <h3 class="text-xl font-bold mb-4 text-gray-800">出庫手順 / Exit Process</h3>
-                <ol class="list-decimal list-inside space-y-3 text-gray-700">
-                    <li>管理人に駐車券を渡し、料金をお支払いください（日本円・現金のみ）。<br><span class="text-sm text-gray-600">Please give your parking ticket to the attendant and pay the fee (Cash only, in JPY).</span></li>
-                    <li>お客様の運転により車庫から後退で気を付けて出庫させてください。<br><span class="text-sm text-gray-600">Please carefully reverse your vehicle out of the parking space.</span></li>
-                    <li>後方にある円形の回転盤までお進みください。<br><span class="text-sm text-gray-600">Proceed to the circular turntable located at the rear.</span></li>
-                    <li>管理人が合図をするまでゆっくりと後退してください。<br><span class="text-sm text-gray-600">Please reverse slowly until the attendant gives you a signal.</span></li>
-                    <li>管理人の合図で停車し、回転盤が回ります。停車の状態を保ってください。<br><span class="text-sm text-gray-600">Stop at the attendant's signal. The turntable will rotate. Please remain stationary.</span></li>
-                    <li>回転停止の確認が出来たら、場内から出庫をしてください。歩行者の多い地域です、注意して公道に出てください。<br><span class="text-sm text-gray-600">After confirming the rotation has stopped, you may exit the parking lot. Please be cautious of pedestrians as you enter the public road.</span></li>
-                </ol>
-            `;
-        }
+  const copyAddressJaBtn = document.getElementById('copyAddressJaBtn');
+  const copyAddressEnBtn = document.getElementById('copyAddressEnBtn');
+  const copyFeedback     = document.getElementById('copyFeedback');
 
-        // Copyrightの年を動的に設定
-        document.getElementById('copyright-year').textContent = new Date().getFullYear();
-    };
+  // ===== 初期化（表示は従来のまま） =====
+  const initializePage = () => {
+    // 年号
+    const y = new Date().getFullYear();
+    const yEl = document.getElementById('copyright-year');
+    if (yEl) yEl.textContent = y;
 
-    // --- フォーム送信イベント ---
-    manualEntryForm.addEventListener('submit', (event) => {
-        event.preventDefault(); // フォームのデフォルト送信をキャンセル
+    // 入庫手順 / 出庫手順（元の文言をそのまま復活）
+    if (entryProcessDiv) {
+      entryProcessDiv.innerHTML = `
+        <h3 class="text-xl font-bold mb-4 text-gray-800 flex items-center"><i class="fas fa-sign-in-alt mr-3"></i>入庫手順 / Entry Process</h3>
+        <ol class="list-decimal pl-6 space-y-3 text-gray-800">
+          <li>車両入庫後、管理人から駐車券を受け取ってください。<br><span class="text-gray-600" lang="en">After parking your vehicle, receive a parking ticket from the attendant.</span></li>
+          <li>管理人は多言語対応しておりません。利用方法はこのページでご確認ください。<br><span class="text-gray-600" lang="en">Multilingual assistance is not available from the attendant. Please refer to this page for the parking procedures.</span></li>
+          <li>駐車券は出庫・精算時に必要です。大切に保管してください。<br><span class="text-gray-600" lang="en">Keep your parking ticket safe. You will need it when paying and leaving.</span></li>
+          <li>駐車券の入庫日時を入力すると、現在の料金目安を確認できます。出庫予定日時を入力すると、その日時までの合計目安を確認できます。<br><span class="text-gray-600" lang="en">Enter the entry date and time from your ticket to check the current estimated fee. Enter your planned departure date and time to estimate the total fee up to that time.</span></li>
+        </ol>
+`;
+    }
 
-        const dateValue = manualDateInput.value;
-        const timeValue = manualTimeInput.value;
+    if (exitProcessDiv) {
+      exitProcessDiv.innerHTML = `
+        <h3 class="text-xl font-bold mb-4 text-gray-800 flex items-center"><i class="fas fa-sign-out-alt mr-3"></i>精算・出庫手順 / Payment & Exit Process</h3>
+        <ol class="list-decimal pl-6 space-y-3 text-gray-800">
+          <li>管理人に駐車券を渡し、料金を確認してお支払いください。日本円・現金のみです。<br><span class="text-gray-600" lang="en">Give your parking ticket to the attendant, confirm the fee, and pay in Japanese yen. Cash only.</span></li>
+          <li>管理人の案内に従い、お客様の運転で車庫から慎重に後退してください。<br><span class="text-gray-600" lang="en">Following the attendant's instructions, carefully reverse your vehicle out of the parking space.</span></li>
+          <li>後方にある円形の回転盤（ターンテーブル）までお進みください。<br><span class="text-gray-600" lang="en">Move onto the circular turntable located behind the parking space.</span></li>
+          <li>管理人の合図に従って、ゆっくり後退してください。<br><span class="text-gray-600" lang="en">Reverse slowly as directed by the attendant.</span></li>
+          <li>管理人の停止の合図で停車してください。回転盤が動いている間は、車を動かさず停車したままお待ちください。<br><span class="text-gray-600" lang="en">Stop when the attendant signals you to stop. Keep your vehicle stationary while the turntable rotates.</span></li>
+          <li>回転盤の停止を確認し、管理人の案内に従って出庫してください。公道に出る際は歩行者に注意してください。<br><span class="text-gray-600" lang="en">Once the turntable has stopped, leave as directed by the attendant. Watch for pedestrians when entering the public road.</span></li>
+        </ol>
+`;
+    }
+  };
 
-        if (!dateValue || !timeValue) {
-            alert("日付と時間を両方入力してください。\nPlease enter both date and time.");
-            return;
-        }
+  // Japan time is independent of the visitor's device time zone.
+  const JAPAN_OFFSET = 9 * 60 * 60 * 1000;
+  const japanDate = date => new Date(date.getTime() + JAPAN_OFFSET);
+  const japanDateKey = date => japanDate(date).toISOString().slice(0, 10);
+  const japanTime = date => japanDate(date).toISOString().slice(11, 16);
+  const parseJapanTime = (day, time) => new Date(day + 'T' + time + '+09:00');
+  // Cabinet Office CSV, retrieved 2026-10-07. Includes substitute and citizens' holidays.
+  // https://www8.cao.go.jp/chosei/shukujitsu/syukujitsu.csv
+  const PUBLIC_HOLIDAYS = new Set(["1955-01-01","1955-01-15","1955-03-21","1955-04-29","1955-05-03","1955-05-05","1955-09-24","1955-11-03","1955-11-23","1956-01-01","1956-01-15","1956-03-21","1956-04-29","1956-05-03","1956-05-05","1956-09-23","1956-11-03","1956-11-23","1957-01-01","1957-01-15","1957-03-21","1957-04-29","1957-05-03","1957-05-05","1957-09-23","1957-11-03","1957-11-23","1958-01-01","1958-01-15","1958-03-21","1958-04-29","1958-05-03","1958-05-05","1958-09-23","1958-11-03","1958-11-23","1959-01-01","1959-01-15","1959-03-21","1959-04-10","1959-04-29","1959-05-03","1959-05-05","1959-09-24","1959-11-03","1959-11-23","1960-01-01","1960-01-15","1960-03-20","1960-04-29","1960-05-03","1960-05-05","1960-09-23","1960-11-03","1960-11-23","1961-01-01","1961-01-15","1961-03-21","1961-04-29","1961-05-03","1961-05-05","1961-09-23","1961-11-03","1961-11-23","1962-01-01","1962-01-15","1962-03-21","1962-04-29","1962-05-03","1962-05-05","1962-09-23","1962-11-03","1962-11-23","1963-01-01","1963-01-15","1963-03-21","1963-04-29","1963-05-03","1963-05-05","1963-09-24","1963-11-03","1963-11-23","1964-01-01","1964-01-15","1964-03-20","1964-04-29","1964-05-03","1964-05-05","1964-09-23","1964-11-03","1964-11-23","1965-01-01","1965-01-15","1965-03-21","1965-04-29","1965-05-03","1965-05-05","1965-09-23","1965-11-03","1965-11-23","1966-01-01","1966-01-15","1966-03-21","1966-04-29","1966-05-03","1966-05-05","1966-09-15","1966-09-23","1966-10-10","1966-11-03","1966-11-23","1967-01-01","1967-01-15","1967-02-11","1967-03-21","1967-04-29","1967-05-03","1967-05-05","1967-09-15","1967-09-24","1967-10-10","1967-11-03","1967-11-23","1968-01-01","1968-01-15","1968-02-11","1968-03-20","1968-04-29","1968-05-03","1968-05-05","1968-09-15","1968-09-23","1968-10-10","1968-11-03","1968-11-23","1969-01-01","1969-01-15","1969-02-11","1969-03-21","1969-04-29","1969-05-03","1969-05-05","1969-09-15","1969-09-23","1969-10-10","1969-11-03","1969-11-23","1970-01-01","1970-01-15","1970-02-11","1970-03-21","1970-04-29","1970-05-03","1970-05-05","1970-09-15","1970-09-23","1970-10-10","1970-11-03","1970-11-23","1971-01-01","1971-01-15","1971-02-11","1971-03-21","1971-04-29","1971-05-03","1971-05-05","1971-09-15","1971-09-24","1971-10-10","1971-11-03","1971-11-23","1972-01-01","1972-01-15","1972-02-11","1972-03-20","1972-04-29","1972-05-03","1972-05-05","1972-09-15","1972-09-23","1972-10-10","1972-11-03","1972-11-23","1973-01-01","1973-01-15","1973-02-11","1973-03-21","1973-04-29","1973-04-30","1973-05-03","1973-05-05","1973-09-15","1973-09-23","1973-09-24","1973-10-10","1973-11-03","1973-11-23","1974-01-01","1974-01-15","1974-02-11","1974-03-21","1974-04-29","1974-05-03","1974-05-05","1974-05-06","1974-09-15","1974-09-16","1974-09-23","1974-10-10","1974-11-03","1974-11-04","1974-11-23","1975-01-01","1975-01-15","1975-02-11","1975-03-21","1975-04-29","1975-05-03","1975-05-05","1975-09-15","1975-09-24","1975-10-10","1975-11-03","1975-11-23","1975-11-24","1976-01-01","1976-01-15","1976-02-11","1976-03-20","1976-04-29","1976-05-03","1976-05-05","1976-09-15","1976-09-23","1976-10-10","1976-10-11","1976-11-03","1976-11-23","1977-01-01","1977-01-15","1977-02-11","1977-03-21","1977-04-29","1977-05-03","1977-05-05","1977-09-15","1977-09-23","1977-10-10","1977-11-03","1977-11-23","1978-01-01","1978-01-02","1978-01-15","1978-01-16","1978-02-11","1978-03-21","1978-04-29","1978-05-03","1978-05-05","1978-09-15","1978-09-23","1978-10-10","1978-11-03","1978-11-23","1979-01-01","1979-01-15","1979-02-11","1979-02-12","1979-03-21","1979-04-29","1979-04-30","1979-05-03","1979-05-05","1979-09-15","1979-09-24","1979-10-10","1979-11-03","1979-11-23","1980-01-01","1980-01-15","1980-02-11","1980-03-20","1980-04-29","1980-05-03","1980-05-05","1980-09-15","1980-09-23","1980-10-10","1980-11-03","1980-11-23","1980-11-24","1981-01-01","1981-01-15","1981-02-11","1981-03-21","1981-04-29","1981-05-03","1981-05-04","1981-05-05","1981-09-15","1981-09-23","1981-10-10","1981-11-03","1981-11-23","1982-01-01","1982-01-15","1982-02-11","1982-03-21","1982-03-22","1982-04-29","1982-05-03","1982-05-05","1982-09-15","1982-09-23","1982-10-10","1982-10-11","1982-11-03","1982-11-23","1983-01-01","1983-01-15","1983-02-11","1983-03-21","1983-04-29","1983-05-03","1983-05-05","1983-09-15","1983-09-23","1983-10-10","1983-11-03","1983-11-23","1984-01-01","1984-01-02","1984-01-15","1984-01-16","1984-02-11","1984-03-20","1984-04-29","1984-04-30","1984-05-03","1984-05-05","1984-09-15","1984-09-23","1984-09-24","1984-10-10","1984-11-03","1984-11-23","1985-01-01","1985-01-15","1985-02-11","1985-03-21","1985-04-29","1985-05-03","1985-05-05","1985-05-06","1985-09-15","1985-09-16","1985-09-23","1985-10-10","1985-11-03","1985-11-04","1985-11-23","1986-01-01","1986-01-15","1986-02-11","1986-03-21","1986-04-29","1986-05-03","1986-05-05","1986-09-15","1986-09-23","1986-10-10","1986-11-03","1986-11-23","1986-11-24","1987-01-01","1987-01-15","1987-02-11","1987-03-21","1987-04-29","1987-05-03","1987-05-04","1987-05-05","1987-09-15","1987-09-23","1987-10-10","1987-11-03","1987-11-23","1988-01-01","1988-01-15","1988-02-11","1988-03-20","1988-03-21","1988-04-29","1988-05-03","1988-05-04","1988-05-05","1988-09-15","1988-09-23","1988-10-10","1988-11-03","1988-11-23","1989-01-01","1989-01-02","1989-01-15","1989-01-16","1989-02-11","1989-02-24","1989-03-21","1989-04-29","1989-05-03","1989-05-04","1989-05-05","1989-09-15","1989-09-23","1989-10-10","1989-11-03","1989-11-23","1989-12-23","1990-01-01","1990-01-15","1990-02-11","1990-02-12","1990-03-21","1990-04-29","1990-04-30","1990-05-03","1990-05-04","1990-05-05","1990-09-15","1990-09-23","1990-09-24","1990-10-10","1990-11-03","1990-11-12","1990-11-23","1990-12-23","1990-12-24","1991-01-01","1991-01-15","1991-02-11","1991-03-21","1991-04-29","1991-05-03","1991-05-04","1991-05-05","1991-05-06","1991-09-15","1991-09-16","1991-09-23","1991-10-10","1991-11-03","1991-11-04","1991-11-23","1991-12-23","1992-01-01","1992-01-15","1992-02-11","1992-03-20","1992-04-29","1992-05-03","1992-05-04","1992-05-05","1992-09-15","1992-09-23","1992-10-10","1992-11-03","1992-11-23","1992-12-23","1993-01-01","1993-01-15","1993-02-11","1993-03-20","1993-04-29","1993-05-03","1993-05-04","1993-05-05","1993-06-09","1993-09-15","1993-09-23","1993-10-10","1993-10-11","1993-11-03","1993-11-23","1993-12-23","1994-01-01","1994-01-15","1994-02-11","1994-03-21","1994-04-29","1994-05-03","1994-05-04","1994-05-05","1994-09-15","1994-09-23","1994-10-10","1994-11-03","1994-11-23","1994-12-23","1995-01-01","1995-01-02","1995-01-15","1995-01-16","1995-02-11","1995-03-21","1995-04-29","1995-05-03","1995-05-04","1995-05-05","1995-09-15","1995-09-23","1995-10-10","1995-11-03","1995-11-23","1995-12-23","1996-01-01","1996-01-15","1996-02-11","1996-02-12","1996-03-20","1996-04-29","1996-05-03","1996-05-04","1996-05-05","1996-05-06","1996-07-20","1996-09-15","1996-09-16","1996-09-23","1996-10-10","1996-11-03","1996-11-04","1996-11-23","1996-12-23","1997-01-01","1997-01-15","1997-02-11","1997-03-20","1997-04-29","1997-05-03","1997-05-05","1997-07-20","1997-07-21","1997-09-15","1997-09-23","1997-10-10","1997-11-03","1997-11-23","1997-11-24","1997-12-23","1998-01-01","1998-01-15","1998-02-11","1998-03-21","1998-04-29","1998-05-03","1998-05-04","1998-05-05","1998-07-20","1998-09-15","1998-09-23","1998-10-10","1998-11-03","1998-11-23","1998-12-23","1999-01-01","1999-01-15","1999-02-11","1999-03-21","1999-03-22","1999-04-29","1999-05-03","1999-05-04","1999-05-05","1999-07-20","1999-09-15","1999-09-23","1999-10-10","1999-10-11","1999-11-03","1999-11-23","1999-12-23","2000-01-01","2000-01-10","2000-02-11","2000-03-20","2000-04-29","2000-05-03","2000-05-04","2000-05-05","2000-07-20","2000-09-15","2000-09-23","2000-10-09","2000-11-03","2000-11-23","2000-12-23","2001-01-01","2001-01-08","2001-02-11","2001-02-12","2001-03-20","2001-04-29","2001-04-30","2001-05-03","2001-05-04","2001-05-05","2001-07-20","2001-09-15","2001-09-23","2001-09-24","2001-10-08","2001-11-03","2001-11-23","2001-12-23","2001-12-24","2002-01-01","2002-01-14","2002-02-11","2002-03-21","2002-04-29","2002-05-03","2002-05-04","2002-05-05","2002-05-06","2002-07-20","2002-09-15","2002-09-16","2002-09-23","2002-10-14","2002-11-03","2002-11-04","2002-11-23","2002-12-23","2003-01-01","2003-01-13","2003-02-11","2003-03-21","2003-04-29","2003-05-03","2003-05-05","2003-07-21","2003-09-15","2003-09-23","2003-10-13","2003-11-03","2003-11-23","2003-11-24","2003-12-23","2004-01-01","2004-01-12","2004-02-11","2004-03-20","2004-04-29","2004-05-03","2004-05-04","2004-05-05","2004-07-19","2004-09-20","2004-09-23","2004-10-11","2004-11-03","2004-11-23","2004-12-23","2005-01-01","2005-01-10","2005-02-11","2005-03-20","2005-03-21","2005-04-29","2005-05-03","2005-05-04","2005-05-05","2005-07-18","2005-09-19","2005-09-23","2005-10-10","2005-11-03","2005-11-23","2005-12-23","2006-01-01","2006-01-02","2006-01-09","2006-02-11","2006-03-21","2006-04-29","2006-05-03","2006-05-04","2006-05-05","2006-07-17","2006-09-18","2006-09-23","2006-10-09","2006-11-03","2006-11-23","2006-12-23","2007-01-01","2007-01-08","2007-02-11","2007-02-12","2007-03-21","2007-04-29","2007-04-30","2007-05-03","2007-05-04","2007-05-05","2007-07-16","2007-09-17","2007-09-23","2007-09-24","2007-10-08","2007-11-03","2007-11-23","2007-12-23","2007-12-24","2008-01-01","2008-01-14","2008-02-11","2008-03-20","2008-04-29","2008-05-03","2008-05-04","2008-05-05","2008-05-06","2008-07-21","2008-09-15","2008-09-23","2008-10-13","2008-11-03","2008-11-23","2008-11-24","2008-12-23","2009-01-01","2009-01-12","2009-02-11","2009-03-20","2009-04-29","2009-05-03","2009-05-04","2009-05-05","2009-05-06","2009-07-20","2009-09-21","2009-09-22","2009-09-23","2009-10-12","2009-11-03","2009-11-23","2009-12-23","2010-01-01","2010-01-11","2010-02-11","2010-03-21","2010-03-22","2010-04-29","2010-05-03","2010-05-04","2010-05-05","2010-07-19","2010-09-20","2010-09-23","2010-10-11","2010-11-03","2010-11-23","2010-12-23","2011-01-01","2011-01-10","2011-02-11","2011-03-21","2011-04-29","2011-05-03","2011-05-04","2011-05-05","2011-07-18","2011-09-19","2011-09-23","2011-10-10","2011-11-03","2011-11-23","2011-12-23","2012-01-01","2012-01-02","2012-01-09","2012-02-11","2012-03-20","2012-04-29","2012-04-30","2012-05-03","2012-05-04","2012-05-05","2012-07-16","2012-09-17","2012-09-22","2012-10-08","2012-11-03","2012-11-23","2012-12-23","2012-12-24","2013-01-01","2013-01-14","2013-02-11","2013-03-20","2013-04-29","2013-05-03","2013-05-04","2013-05-05","2013-05-06","2013-07-15","2013-09-16","2013-09-23","2013-10-14","2013-11-03","2013-11-04","2013-11-23","2013-12-23","2014-01-01","2014-01-13","2014-02-11","2014-03-21","2014-04-29","2014-05-03","2014-05-04","2014-05-05","2014-05-06","2014-07-21","2014-09-15","2014-09-23","2014-10-13","2014-11-03","2014-11-23","2014-11-24","2014-12-23","2015-01-01","2015-01-12","2015-02-11","2015-03-21","2015-04-29","2015-05-03","2015-05-04","2015-05-05","2015-05-06","2015-07-20","2015-09-21","2015-09-22","2015-09-23","2015-10-12","2015-11-03","2015-11-23","2015-12-23","2016-01-01","2016-01-11","2016-02-11","2016-03-20","2016-03-21","2016-04-29","2016-05-03","2016-05-04","2016-05-05","2016-07-18","2016-08-11","2016-09-19","2016-09-22","2016-10-10","2016-11-03","2016-11-23","2016-12-23","2017-01-01","2017-01-02","2017-01-09","2017-02-11","2017-03-20","2017-04-29","2017-05-03","2017-05-04","2017-05-05","2017-07-17","2017-08-11","2017-09-18","2017-09-23","2017-10-09","2017-11-03","2017-11-23","2017-12-23","2018-01-01","2018-01-08","2018-02-11","2018-02-12","2018-03-21","2018-04-29","2018-04-30","2018-05-03","2018-05-04","2018-05-05","2018-07-16","2018-08-11","2018-09-17","2018-09-23","2018-09-24","2018-10-08","2018-11-03","2018-11-23","2018-12-23","2018-12-24","2019-01-01","2019-01-14","2019-02-11","2019-03-21","2019-04-29","2019-04-30","2019-05-01","2019-05-02","2019-05-03","2019-05-04","2019-05-05","2019-05-06","2019-07-15","2019-08-11","2019-08-12","2019-09-16","2019-09-23","2019-10-14","2019-10-22","2019-11-03","2019-11-04","2019-11-23","2020-01-01","2020-01-13","2020-02-11","2020-02-23","2020-02-24","2020-03-20","2020-04-29","2020-05-03","2020-05-04","2020-05-05","2020-05-06","2020-07-23","2020-07-24","2020-08-10","2020-09-21","2020-09-22","2020-11-03","2020-11-23","2021-01-01","2021-01-11","2021-02-11","2021-02-23","2021-03-20","2021-04-29","2021-05-03","2021-05-04","2021-05-05","2021-07-22","2021-07-23","2021-08-08","2021-08-09","2021-09-20","2021-09-23","2021-11-03","2021-11-23","2022-01-01","2022-01-10","2022-02-11","2022-02-23","2022-03-21","2022-04-29","2022-05-03","2022-05-04","2022-05-05","2022-07-18","2022-08-11","2022-09-19","2022-09-23","2022-10-10","2022-11-03","2022-11-23","2023-01-01","2023-01-02","2023-01-09","2023-02-11","2023-02-23","2023-03-21","2023-04-29","2023-05-03","2023-05-04","2023-05-05","2023-07-17","2023-08-11","2023-09-18","2023-09-23","2023-10-09","2023-11-03","2023-11-23","2024-01-01","2024-01-08","2024-02-11","2024-02-12","2024-02-23","2024-03-20","2024-04-29","2024-05-03","2024-05-04","2024-05-05","2024-05-06","2024-07-15","2024-08-11","2024-08-12","2024-09-16","2024-09-22","2024-09-23","2024-10-14","2024-11-03","2024-11-04","2024-11-23","2025-01-01","2025-01-13","2025-02-11","2025-02-23","2025-02-24","2025-03-20","2025-04-29","2025-05-03","2025-05-04","2025-05-05","2025-05-06","2025-07-21","2025-08-11","2025-09-15","2025-09-23","2025-10-13","2025-11-03","2025-11-23","2025-11-24","2026-01-01","2026-01-12","2026-02-11","2026-02-23","2026-03-20","2026-04-29","2026-05-03","2026-05-04","2026-05-05","2026-05-06","2026-07-20","2026-08-11","2026-09-21","2026-09-22","2026-09-23","2026-10-12","2026-11-03","2026-11-23","2027-01-01","2027-01-11","2027-02-11","2027-02-23","2027-03-21","2027-03-22","2027-04-29","2027-05-03","2027-05-04","2027-05-05","2027-07-19","2027-08-11","2027-09-20","2027-09-23","2027-10-11","2027-11-03","2027-11-23"]);
+  const requireCoveredDates = (start, end) => {
+    if (!Number.isFinite(start.getTime()) || !Number.isFinite(end.getTime())) throw new Error('正しい日時を入力してください。 / Please enter valid dates and times.');
+    if (japanDateKey(start) < '1955-01-01' || japanDateKey(end) >= '2028-01-01') throw new Error('この年の祝日料金は未確認です。管理人にご確認ください。 / Holiday rates for this year are not verified. Please ask the attendant.');
+  };
+  const isWeekendOrHoliday = date => {
+    const day = japanDate(date).getUTCDay();
+    return day === 0 || day === 6 || PUBLIC_HOLIDAYS.has(japanDateKey(date));
+  };
+  const isNightTime = date => {
+    const hour = japanDate(date).getUTCHours();
+    return hour >= 21 || hour < 6;
+  };
+  const getNightSessionBounds = date => {
+    const local = japanDate(date);
+    const start = new Date(local);
+    start.setUTCHours(21, 0, 0, 0);
+    if (local.getUTCHours() < 6) start.setUTCDate(start.getUTCDate() - 1);
+    const end = new Date(start);
+    end.setUTCDate(end.getUTCDate() + 1);
+    end.setUTCHours(6, 0, 0, 0);
+    return {start: new Date(start.getTime() - JAPAN_OFFSET), end: new Date(end.getTime() - JAPAN_OFFSET)};
+  };
 
-        const entryDateTime = new Date(`${dateValue}T${timeValue}`);
+  const calculateFeeBetween = (entryDate, endDate) => {
+    requireCoveredDates(entryDate, endDate);
+      let totalFee = 0;
+      const NIGHT_MAX = 1800;
+      let nightAccum = 0;
+      let inNight = isNightTime(entryDate);
 
-        if (isNaN(entryDateTime.getTime())) {
-            alert("無効な日時です。正しく入力してください。\nInvalid date/time. Please enter correctly.");
-            return;
-        }
+      // 今いる夜セッションの終了境界（inNightのときだけ有効）
+      let nightBounds = inNight ? getNightSessionBounds(entryDate) : null;
 
-        calculateFeeFromDateTime(entryDateTime);
-    });
+      // 15分刻みで加算
+      let t = new Date(entryDate);
+      while (t < endDate) {
+        const next = new Date(t.getTime() + 15 * 60 * 1000);
 
-    // --- 料金計算と情報表示 ---
-    const isHoliday = (date) => {
-        const day = date.getDay();
-        return day === 0 || day === 6; // 0: Sunday, 6: Saturday
-    };
+        // このスロット開始時点の土日/平日レートを決定
+        const ratePer15 = isWeekendOrHoliday(t) ? 200 : 300;
 
-    // ===== 夜間判定（21:00〜翌6:00） =====
-    const isNightTime = (date) => {
-      const h = date.getHours();
-      return (h >= 21 || h < 6);
-    };
-
-    // 「1夜」の境界を返す（その時刻が属する夜の開始と終了）
-    // 夜開始: 当日21:00、夜終了: 翌日06:00（※6時ちょうどは夜間外）
-    const getNightSessionBounds = (date) => {
-      const d = new Date(date);
-      const start = new Date(d);
-      start.setHours(21, 0, 0, 0);
-
-      let end = new Date(start);
-      end.setDate(start.getDate() + 1);
-      end.setHours(6, 0, 0, 0);
-
-      // もし date が 0:00〜5:59 なら、前日の21:00を開始とし、当日6:00を終了にする
-      if (d.getHours() < 6) {
-        start.setDate(start.getDate() - 1); // 前日の21:00
-        end.setDate(end.getDate() - 1);     // 当日の06:00
-      }
-      return { start, end };
-    };
-
-      // Use the published site's night-session calculation for both estimates.
-    const calculateFeeBetween = (entryDate, endDate) => {
-        let totalFee = 0;
-        const NIGHT_MAX = 1800;
-        let nightAccum = 0;
-        let inNight = isNightTime(entryDate);
-
-        // 今いる夜セッションの終了境界（inNightのときだけ有効）
-        let nightBounds = inNight ? getNightSessionBounds(entryDate) : null;
-
-        // 15分刻みで加算
-        let t = new Date(entryDate);
-        while (t < endDate) {
-          const next = new Date(t);
-          next.setMinutes(next.getMinutes() + 15);
-
-          // このスロット開始時点の土日/平日レートを決定
-          const ratePer15 = isHoliday(t) ? 200 : 300;
-
-          if (isNightTime(t)) {
-            // 夜間
-            if (!inNight) {
-              // 新規夜間セッション開始
-              inNight = true;
-              nightAccum = 0;
-              nightBounds = getNightSessionBounds(t);
-            }
-
-            // 夜間料金は上限まで
-            if (nightAccum < NIGHT_MAX) {
-              nightAccum += ratePer15;
-              if (nightAccum > NIGHT_MAX) {
-                // 超過分はカット
-                const over = nightAccum - NIGHT_MAX;
-                totalFee += (ratePer15 - over);
-                nightAccum = NIGHT_MAX;
-              } else {
-                totalFee += ratePer15;
-              }
-            }
-            // セッション終了判定：翌6:00を過ぎたらリセット
-            if (nightBounds && next >= nightBounds.end) {
-              inNight = false;
-              nightAccum = 0;
-              nightBounds = null;
-            }
-          } else {
-            // 昼間
-            inNight = false; // 念のため
+        if (isNightTime(t)) {
+          // 夜間
+          if (!inNight) {
+            // 新規夜間セッション開始
+            inNight = true;
             nightAccum = 0;
-            nightBounds = null;
-            totalFee += ratePer15;
+            nightBounds = getNightSessionBounds(t);
           }
 
-          t = next;
-        }
-
-          return totalFee;
-    };
-
-    const calculateFeeFromDateTime = (entryDate) => {
-        try {
-            const now = new Date();
-
-            if (entryDate > now) {
-                alert("入庫日時は現在時刻より前に設定してください。\nEntry time must be before the current time.");
-                resetTicketInfo();
-                return;
+          // 夜間料金は上限まで
+          if (nightAccum < NIGHT_MAX) {
+            nightAccum += ratePer15;
+            if (nightAccum > NIGHT_MAX) {
+              // 超過分はカット
+              const over = nightAccum - NIGHT_MAX;
+              totalFee += (ratePer15 - over);
+              nightAccum = NIGHT_MAX;
+            } else {
+              totalFee += ratePer15;
             }
-
-            const totalFee = calculateFeeBetween(entryDate, now);
-
-            const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
-            document.getElementById('entryDate').textContent = entryDate.toLocaleDateString('ja-JP', options);
-            document.getElementById('entryTime').textContent = entryDate.toTimeString().substring(0, 5);
-            document.getElementById('dayType').textContent = isHoliday(entryDate) ? '土日祝 / Weekend/Holiday' : '平日 / Weekday';
-            document.getElementById('currentTime').textContent = now.toTimeString().substring(0, 5);
-            document.getElementById('estimatedFee').textContent = `¥${totalFee.toLocaleString()}`;
-
-        } catch (error) {
-            console.error("Calculation failed:", error);
-            resetTicketInfo();
-            document.getElementById('estimatedFee').innerHTML = `計算エラー<br>Calculation Error`;
+          }
+          // セッション終了判定：翌6:00を過ぎたらリセット
+          if (nightBounds && next >= nightBounds.end) {
+            inNight = false;
+            nightAccum = 0;
+            nightBounds = null;
+          }
+        } else {
+          // 昼間
+          inNight = false; // 念のため
+          nightAccum = 0;
+          nightBounds = null;
+          totalFee += ratePer15;
         }
-    };
 
-    const resetTicketInfo = () => {
-        document.getElementById('entryDate').textContent = '----/--/--';
-        document.getElementById('entryTime').textContent = '--:--';
-        document.getElementById('dayType').textContent = '---';
-        document.getElementById('currentTime').textContent = '--:--';
-        document.getElementById('estimatedFee').textContent = '¥---';
-    };
+        t = next;
+      }
 
+    return totalFee;
+  };
+
+  // ===== 料金計算（表示は入庫日の曜日表記のまま） =====
+  const calculateFeeFromDateTime = (entryDate) => {
+    try {
+      const now = new Date();
+      if (entryDate > now) {
+        alert("入庫日時は現在時刻より前に設定してください。\nEntry time must be before the current time.");
+        resetTicketInfo();
+        return;
+      }
+
+      const totalFee = calculateFeeBetween(entryDate, now);
+
+      // 画面表示（従来通り、入庫日の曜日区分でのみ表示）
+      const options = { timeZone: 'Asia/Tokyo', year: 'numeric', month: '2-digit', day: '2-digit' };
+      entryDateEl.textContent = entryDate.toLocaleDateString('ja-JP', options);
+      entryTimeEl.textContent = japanTime(entryDate);
+      dayTypeEl.textContent = isWeekendOrHoliday(entryDate)
+        ? '土日祝 / Weekend/Holiday'
+        : '平日 / Weekday';
+      currentTimeEl.textContent = japanDateKey(now) + ' ' + japanTime(now);
+      estimatedFeeEl.textContent = `¥${totalFee.toLocaleString()}`;
+
+    } catch (e) {
+      console.error(e);
+      resetTicketInfo();
+      estimatedFeeEl.textContent = e.message || '計算エラー / Calculation Error';
+    }
+  };
+
+  const resetTicketInfo = () => {
+    entryDateEl.textContent = '----/--/--';
+    entryTimeEl.textContent = '--:--';
+    dayTypeEl.textContent   = '---';
+    currentTimeEl.textContent = '--:--';
+    estimatedFeeEl.textContent = '¥---';
+  };
+
+  // ===== フォーム送信 =====
+  if (manualEntryForm) {
+    manualEntryForm.addEventListener('submit', (ev) => {
+      ev.preventDefault();
+      const d = manualDateInput.value;
+      const t = manualTimeInput.value;
+      if (!d || !t) {
+        alert("日付と時間を両方入力してください。\nPlease enter both date and time.");
+        return;
+      }
+      const entry = parseJapanTime(d, t);
+      if (isNaN(entry.getTime())) {
+        alert("無効な日時です。正しく入力してください。\nInvalid date/time. Please enter correctly.");
+        return;
+      }
+      calculateFeeFromDateTime(entry);
+    });
+  }
 
     // --- Planned departure estimate, separate from the current fee and payment ---
     const plannedForm = document.getElementById('plannedFeeForm');
@@ -209,7 +215,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (plannedForm) {
         const today = new Date();
-        plannedDate.value = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+        plannedDate.value = japanDateKey(today);
         [manualDateInput, manualTimeInput, plannedDate, plannedTime].forEach(input => {
             input.addEventListener('input', clearPlannedEstimate);
         });
@@ -221,8 +227,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 fail('入庫日時と出庫予定日時を入力してください。\nPlease enter the entry and planned departure dates and times.');
                 return;
             }
-            const entry = new Date(`${manualDateInput.value}T${manualTimeInput.value}`);
-            const departure = new Date(`${plannedDate.value}T${plannedTime.value}`);
+            const entry = parseJapanTime(manualDateInput.value, manualTimeInput.value);
+            const departure = parseJapanTime(plannedDate.value, plannedTime.value);
             const now = new Date();
             if (!Number.isFinite(entry.getTime()) || !Number.isFinite(departure.getTime())) {
                 fail('正しい日時を入力してください。\nPlease enter valid dates and times.');
@@ -232,45 +238,43 @@ document.addEventListener('DOMContentLoaded', () => {
                 fail('入庫は現在以前、出庫予定は現在以降かつ入庫より後の日時にしてください。\nEntry must not be in the future. Planned departure must be in the future and after entry.');
                 return;
             }
+            try { requireCoveredDates(entry, departure); } catch (error) { fail(error.message); return; }
             const dateLabel = `${plannedDate.value} ${plannedTime.value}`;
             plannedSummary.textContent = `${dateLabel}まで利用した場合の料金目安 / Estimated total if you leave at ${dateLabel}`;
             plannedFee.textContent = `¥${calculateFeeBetween(entry, departure).toLocaleString()}`;
         });
     }
 
-    // --- イベントリスナーのセットアップ ---
-    // ▼▼▼ ここからが変更された部分 ▼▼▼
-    // 日本語住所コピーのイベントリスナー
-    if (copyAddressJaBtn) {
-        copyAddressJaBtn.addEventListener('click', () => {
-            const address = "〒107-0052 東京都港区赤坂2-15-18 西山興業赤坂ビル";
-            navigator.clipboard.writeText(address).then(() => {
-                copyFeedback.innerHTML = '日本語住所をコピーしました！<br>Copied Japanese address!';
-                setTimeout(() => { copyFeedback.innerHTML = ''; }, 3000);
-            }).catch(err => {
-                console.error('Japanese address copy failed:', err);
-                copyFeedback.innerHTML = 'コピーに失敗しました<br>Copy failed';
-                setTimeout(() => { copyFeedback.innerHTML = ''; }, 3000);
-            });
-        });
-    }
 
-    // 英語住所コピーのイベントリスナー
-    if (copyAddressEnBtn) {
-        copyAddressEnBtn.addEventListener('click', () => {
-            const address = "Nishiyama Kogyo Akasaka Bldg., 2-15-18 Akasaka, Minato-ku, Tokyo 107-0052, Japan";
-            navigator.clipboard.writeText(address).then(() => {
-                copyFeedback.innerHTML = '英語住所をコピーしました！<br>Copied English address!';
-                setTimeout(() => { copyFeedback.innerHTML = ''; }, 3000);
-            }).catch(err => {
-                console.error('English address copy failed:', err);
-                copyFeedback.innerHTML = 'コピーに失敗しました<br>Copy failed';
-                setTimeout(() => { copyFeedback.innerHTML = ''; }, 3000);
-            });
-        });
-    }
-    // ▲▲▲ ここまでが変更された部分 ▲▲▲
+  // ===== 住所コピー（表示仕様は従来通り） =====
+  if (copyAddressJaBtn) {
+    copyAddressJaBtn.addEventListener('click', () => {
+      const address = "〒107-0052 東京都港区赤坂2-15-18 西山興業赤坂ビル";
+      (navigator.clipboard && navigator.clipboard.writeText ? navigator.clipboard.writeText(address) : Promise.reject(new Error('Clipboard unavailable'))).then(() => {
+        copyFeedback.innerHTML = '日本語住所をコピーしました！<br>Copied Japanese address!';
+        setTimeout(() => { copyFeedback.innerHTML = ''; }, 3000);
+      }).catch(err => {
+        console.error('Japanese address copy failed:', err);
+        copyFeedback.innerHTML = 'コピーに失敗しました<br>Copy failed';
+        setTimeout(() => { copyFeedback.innerHTML = ''; }, 3000);
+      });
+    });
+  }
 
-    // --- ページの初期化を実行 ---
-    initializePage();
+  if (copyAddressEnBtn) {
+    copyAddressEnBtn.addEventListener('click', () => {
+      const address = "Nishiyama Kogyo Akasaka Bldg., 2-15-18 Akasaka, Minato-ku, Tokyo 107-0052, Japan";
+      (navigator.clipboard && navigator.clipboard.writeText ? navigator.clipboard.writeText(address) : Promise.reject(new Error('Clipboard unavailable'))).then(() => {
+        copyFeedback.innerHTML = '英語住所をコピーしました！<br>Copied English address!';
+        setTimeout(() => { copyFeedback.innerHTML = ''; }, 3000);
+      }).catch(err => {
+        console.error('English address copy failed:', err);
+        copyFeedback.innerHTML = 'コピーに失敗しました<br>Copy failed';
+        setTimeout(() => { copyFeedback.innerHTML = ''; }, 3000);
+      });
+    });
+  }
+
+  // ===== 起動 =====
+  initializePage();
 });
