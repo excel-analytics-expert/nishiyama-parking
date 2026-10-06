@@ -104,11 +104,11 @@ header.bg-gradient-to-r {
 
 /* チケット情報エリアの特定のスタイル */
 #estimatedFee {
-    color: #f59e0b; /* amber-500, 目立たせるための色 */
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.4);
+    color: #92400e;
+    text-shadow: none;
 }
 #feeNotice {
-    color: #93c5fd; /* blue-300 */
+    color: #374151;
 }
 
 /* アドレスコピーボタンのフォーカススタイル */
@@ -117,4 +117,66 @@ header.bg-gradient-to-r {
 }
 #copyAddressBtn:focus {
     box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5); /* フォーカスリング */
+}
+
+/* 日本語・英語の説明文と料金表示を読みやすくする */
+body {
+    background-color: #f9fafb;
+    color: #111827;
+    font-size: 18px;
+    line-height: 1.75;
+    color-scheme: light;
+}
+.parking-card {
+    background: #f9fafb;
+    color: #111827;
+}
+.text-sm, .text-xs {
+    font-size: 16px;
+    line-height: 1.75;
+}
+.text-gray-500, .text-gray-600, .text-gray-700 {
+    color: #374151;
+}
+.text-red-600, .text-red-700 {
+    color: #991b1b;
+}
+.text-green-600 {
+    color: #166534;
+}
+.text-blue-600, #plannedFee {
+    color: #1e40af;
+}
+input {
+    min-width: 0;
+    max-width: 100%;
+    min-height: 48px;
+    background-color: #ffffff;
+    color: #111827;
+    font-size: 18px;
+    line-height: 1.5;
+    color-scheme: light;
+}
+button {
+    min-height: 48px;
+    white-space: normal;
+    line-height: 1.6;
+}
+#calculateBtn {
+    background-color: #166534;
+    color: #ffffff;
+}
+#plannedFeeForm button {
+    background-color: #1d4ed8;
+    color: #ffffff;
+}
+#copyAddressJaBtn, #copyAddressEnBtn {
+    color: #374151;
+}
+#copyFeedback {
+    height: auto;
+    min-height: 1.75em;
+}
+header, header p, header span, footer, footer p {
+    color: #ffffff;
 }

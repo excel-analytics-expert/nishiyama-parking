@@ -32,17 +32,18 @@
             </h2>
             <div class="grid md:grid-cols-2 gap-6">
                 <div>
+                    <p class="text-sm text-gray-600 mb-3">日時は日本時間で入力してください。<br>Please enter all dates and times in Japan time (JST).</p>
                     <form id="manualEntryForm">
                         <div class="mb-4">
                             <label for="manualDate" class="block font-semibold mb-2">入庫日 / Entry Date</label>
-                            <input type="date" id="manualDate" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                            <input type="date" id="manualDate" min="1955-01-01" max="2027-12-31" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
                         </div>
                         <div class="mb-6">
                             <label for="manualTime" class="block font-semibold mb-2">入庫時間 / Entry Time</label>
                             <input type="time" id="manualTime" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
                         </div>
                         <button type="submit" id="calculateBtn" class="w-full bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 transition flex items-center justify-center">
-                            <i class="fas fa-calculator mr-2"></i><span>料金を計算 / Calculate Fee</span>
+                            <i class="fas fa-calculator mr-2"></i><span>現在の料金目安を計算 / Estimate current fee</span>
                         </button>
                     </form>
                 </div>
@@ -51,33 +52,56 @@
                 <div class="bg-white bg-opacity-20 rounded-lg p-4">
                     <h3 class="font-bold mb-3">駐車券情報 / Ticket Information</h3>
                     <div class="space-y-2">
-                        <div class="flex justify-between">
+                        <div class="flex flex-wrap justify-between gap-2">
                             <span>入庫日 / Entry Date:</span>
                             <span id="entryDate">----/--/--</span>
                         </div>
-                         <div class="flex justify-between">
+                         <div class="flex flex-wrap justify-between gap-2">
                             <span>入庫時間 / Entry Time:</span>
                             <span id="entryTime">--:--</span>
                         </div>
-                        <div class="flex justify-between">
+                        <div class="flex flex-wrap justify-between gap-2">
                             <span>曜日区分 / Day Type:</span>
                             <span id="dayType">---</span>
                         </div>
-                        <div class="flex justify-between">
-                            <span>現在時間 / Current Time:</span>
+                        <div class="flex flex-wrap justify-between gap-2">
+                            <span>現在日時 / Current date/time:</span>
                             <span id="currentTime">--:--</span>
                         </div>
                         <div class="border-t pt-2 mt-3">
-                            <div class="flex justify-between font-bold text-lg">
-                                <span>概算料金 / Estimated Fee:</span>
+                            <div class="flex flex-wrap justify-between gap-2 font-bold text-lg">
+                                <span>現在の料金目安 / Current estimated fee:</span>
                                 <span id="estimatedFee" class="text-yellow-300">¥---</span>
                             </div>
-                            <p class="text-xs mt-1 text-blue-200">※実際の料金と異なる場合があります<br>*The actual fee may differ.</p>
+                            <p class="text-xs mt-1 text-gray-600">※実際の料金と異なる場合があります<br>*The actual fee may differ.</p>
                         </div>
                     </div>
                 </div>
                 <!-- /Ticket Info -->
             </div>
+            <section class="mt-6 pt-6 border-t border-blue-200" aria-labelledby="plannedFeeHeading">
+                <h3 id="plannedFeeHeading" class="font-bold text-lg mb-3">何時までならいくら？ / Fee by planned departure time</h3>
+                <p class="text-sm mb-4">駐車券の入庫日時と出庫予定日時から、合計料金の目安を確認できます。<br>Estimate the total fee from your ticket's entry time to your planned departure.</p>
+                <form id="plannedFeeForm">
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <label for="plannedExitDate" class="block font-semibold mb-2">出庫予定日 / Planned departure date</label>
+                            <input type="date" id="plannedExitDate" min="1955-01-01" max="2027-12-31" class="w-full p-3 border border-gray-300 rounded-lg text-gray-800" required>
+                        </div>
+                        <div>
+                            <label for="plannedExitTime" class="block font-semibold mb-2">何時まで利用するか / Planned departure time</label>
+                            <input type="time" id="plannedExitTime" class="w-full p-3 border border-gray-300 rounded-lg text-gray-800" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 mt-4">予定時刻までの目安を計算 / Estimate fee by departure time</button>
+                </form>
+                <div class="mt-4" role="status" aria-live="polite" aria-atomic="true">
+                    <p id="plannedFeeSummary" class="text-sm"></p>
+                    <p class="font-bold text-lg">予定時刻までの合計目安 / Estimated total by departure: <span id="plannedFee">¥---</span></p>
+                    <p id="plannedFeeError" class="text-sm text-red-700 whitespace-pre-line"></p>
+                </div>
+                <p class="text-xs mt-2">※追加料金ではなく、入庫からの合計目安です。実際の精算額は管理人にご確認ください。祝日・休日は2027年までの公表済み日付に対応しています。<br>*This is the estimated total from entry, not an additional charge. Confirm the actual payment with the attendant. Published Japanese public holidays and substitute holidays are supported through 2027.</p>
+            </section>
         </div>
         <!-- /Manual Input Section -->
 
@@ -88,40 +112,55 @@
                 <div class="rate-card p-4 rounded-lg shadow">
                     <h3 class="font-bold text-lg mb-3 text-blue-600">平日料金 / Weekdays</h3>
                     <div class="space-y-2">
-                        <div class="flex justify-between"><span>06:00 - 21:00</span><span class="font-bold">15分 ¥300 / ¥300 per 15 min</span></div>
-                        <div class="flex justify-between"><span>21:00 - 06:00</span><span class="font-bold">15分 ¥300 / ¥300 per 15 min</span></div>
-                        <div class="flex justify-between text-red-600"><span>夜間最大料金 / Night Max Rate</span><span class="font-bold">¥1,800</span></div>
+                        <div class="flex flex-wrap justify-between gap-2"><span>06:00 - 21:00</span><span class="font-bold">15分 ¥300 / ¥300 per 15 min</span></div>
+                        <div class="flex flex-wrap justify-between gap-2"><span>21:00 - 06:00</span><span class="font-bold">15分 ¥300 / ¥300 per 15 min</span></div>
+                        <div class="flex flex-wrap justify-between gap-2 text-red-600"><span>夜間最大料金 / Night Max Rate</span><span class="font-bold">¥1,800</span></div>
                     </div>
                 </div>
                 <div class="rate-card p-4 rounded-lg shadow">
                     <h3 class="font-bold text-lg mb-3 text-green-600">土日祝料金 / Weekends & Holidays</h3>
                     <div class="space-y-2">
-                        <div class="flex justify-between"><span>06:00 - 21:00</span><span class="font-bold">15分 ¥200 / ¥200 per 15 min</span></div>
-                        <div class="flex justify-between"><span>21:00 - 06:00</span><span class="font-bold">15分 ¥200 / ¥200 per 15 min</span></div>
-                        <div class="flex justify-between text-red-600"><span>夜間最大料金 / Night Max Rate</span><span class="font-bold">¥1,800</span></div>
+                        <div class="flex flex-wrap justify-between gap-2"><span>06:00 - 21:00</span><span class="font-bold">15分 ¥200 / ¥200 per 15 min</span></div>
+                        <div class="flex flex-wrap justify-between gap-2"><span>21:00 - 06:00</span><span class="font-bold">15分 ¥200 / ¥200 per 15 min</span></div>
+                        <div class="flex flex-wrap justify-between gap-2 text-red-600"><span>夜間最大料金 / Night Max Rate</span><span class="font-bold">¥1,800</span></div>
                     </div>
                 </div>
             </div>
             <div class="mt-4 p-4 bg-yellow-50 rounded-lg border-l-4 border-yellow-400">
-                <p class="text-sm text-gray-700">※夜間最大料金は21:00-6:00の利用時のみ適用。超過時は通常料金が加算されます。<br>*Night max rate applies only for use between 21:00-6:00. Regular fees apply for overtime.</p>
+                <p class="text-sm text-gray-700">※21:00〜翌6:00の夜間料金は最大1,800円です。通常計算が1,800円未満の場合はその金額です。6:00以降は通常料金が加算されます。<br>*Night fees from 21:00 to 06:00 the next day are capped at ¥1,800. If the normal calculation is lower, the lower amount applies. Regular charges resume after 06:00.</p>
             </div>
         </div>
 
         <!-- Usage Instructions -->
+        <p class="text-sm text-gray-700 mb-4">車両の操作は現場の管理人の案内に従ってください。<br>Follow the on-site attendant’s instructions when moving your vehicle.</p>
         <div class="grid md:grid-cols-2 gap-8 mb-8">
             <div id="entryProcess" class="bg-white rounded-lg shadow-lg p-6">
-                <!-- この中身はJSで動的に生成されます -->
-            </div>
+        <h3 class="text-xl font-bold mb-4 text-gray-800 flex items-center"><i class="fas fa-sign-in-alt mr-3"></i>入庫手順 / Entry Process</h3>
+        <ol class="list-decimal pl-6 space-y-3 text-gray-800">
+          <li>車両入庫後、管理人から駐車券を受け取ってください。<br><span class="text-gray-600" lang="en">After parking your vehicle, receive a parking ticket from the attendant.</span></li>
+          <li>管理人は多言語対応しておりません。利用方法はこのページでご確認ください。<br><span class="text-gray-600" lang="en">Multilingual assistance is not available from the attendant. Please refer to this page for the parking procedures.</span></li>
+          <li>駐車券は出庫・精算時に必要です。大切に保管してください。<br><span class="text-gray-600" lang="en">Keep your parking ticket safe. You will need it when paying and leaving.</span></li>
+          <li>駐車券の入庫日時を入力すると、現在の料金目安を確認できます。出庫予定日時を入力すると、その日時までの合計目安を確認できます。<br><span class="text-gray-600" lang="en">Enter the entry date and time from your ticket to check the current estimated fee. Enter your planned departure date and time to estimate the total fee up to that time.</span></li>
+        </ol>
+</div>
             <div id="exitProcess" class="bg-white rounded-lg shadow-lg p-6">
-                <!-- この中身はJSで動的に生成されます -->
-            </div>
+        <h3 class="text-xl font-bold mb-4 text-gray-800 flex items-center"><i class="fas fa-sign-out-alt mr-3"></i>精算・出庫手順 / Payment & Exit Process</h3>
+        <ol class="list-decimal pl-6 space-y-3 text-gray-800">
+          <li>管理人に駐車券を渡し、料金を確認してお支払いください。日本円・現金のみです。<br><span class="text-gray-600" lang="en">Give your parking ticket to the attendant, confirm the fee, and pay in Japanese yen. Cash only.</span></li>
+          <li>管理人の案内に従い、お客様の運転で車庫から慎重に後退してください。<br><span class="text-gray-600" lang="en">Following the attendant's instructions, carefully reverse your vehicle out of the parking space.</span></li>
+          <li>後方にある円形の回転盤（ターンテーブル）までお進みください。<br><span class="text-gray-600" lang="en">Move onto the circular turntable located behind the parking space.</span></li>
+          <li>管理人の合図に従って、ゆっくり後退してください。<br><span class="text-gray-600" lang="en">Reverse slowly as directed by the attendant.</span></li>
+          <li>管理人の停止の合図で停車してください。回転盤が動いている間は、車を動かさず停車したままお待ちください。<br><span class="text-gray-600" lang="en">Stop when the attendant signals you to stop. Keep your vehicle stationary while the turntable rotates.</span></li>
+          <li>回転盤の停止を確認し、管理人の案内に従って出庫してください。公道に出る際は歩行者に注意してください。<br><span class="text-gray-600" lang="en">Once the turntable has stopped, leave as directed by the attendant. Watch for pedestrians when entering the public road.</span></li>
+        </ol>
+</div>
         </div>
 
         <!-- ▼▼▼ ここからが変更された部分 ▼▼▼ -->
         <!-- Contact with Address Copy -->
         <div class="bg-white rounded-lg shadow-lg p-6">
             <h3 class="text-xl font-bold mb-4 text-gray-800 flex items-center">
-                <i class="fas fa-map-marker-alt mr-3"></i><span>所在地・お問い合わせ / Location & Contact</span>
+                <i class="fas fa-map-marker-alt mr-3"></i><span>所在地・お支払い / Location & Payment</span>
             </h3>
             <div class="space-y-4">
                 <div>
