@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const copyAddressEnBtn = document.getElementById('copyAddressEnBtn');
     // ▲▲▲ ここまでが変更された部分 ▲▲▲
     const copyFeedback = document.getElementById('copyFeedback');
-    
+
     // --- 初期化処理 ---
     const initializePage = () => {
         // 入庫・出庫手順の表示
@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 </ol>
             `;
         }
-        
+
         // Copyrightの年を動的に設定
         document.getElementById('copyright-year').textContent = new Date().getFullYear();
     };
@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- フォーム送信イベント ---
     manualEntryForm.addEventListener('submit', (event) => {
         event.preventDefault(); // フォームのデフォルト送信をキャンセル
-        
+
         const dateValue = manualDateInput.value;
         const timeValue = manualTimeInput.value;
 
@@ -58,7 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const entryDateTime = new Date(`${dateValue}T${timeValue}`);
-        
+
         if (isNaN(entryDateTime.getTime())) {
             alert("無効な日時です。正しく入力してください。\nInvalid date/time. Please enter correctly.");
             return;
@@ -73,48 +73,102 @@ document.addEventListener('DOMContentLoaded', () => {
         return day === 0 || day === 6; // 0: Sunday, 6: Saturday
     };
 
+    // ===== 夜間判定（21:00〜翌6:00） =====
+    const isNightTime = (date) => {
+      const h = date.getHours();
+      return (h >= 21 || h < 6);
+    };
+
+    // 「1夜」の境界を返す（その時刻が属する夜の開始と終了）
+    // 夜開始: 当日21:00、夜終了: 翌日06:00（※6時ちょうどは夜間外）
+    const getNightSessionBounds = (date) => {
+      const d = new Date(date);
+      const start = new Date(d);
+      start.setHours(21, 0, 0, 0);
+
+      let end = new Date(start);
+      end.setDate(start.getDate() + 1);
+      end.setHours(6, 0, 0, 0);
+
+      // もし date が 0:00〜5:59 なら、前日の21:00を開始とし、当日6:00を終了にする
+      if (d.getHours() < 6) {
+        start.setDate(start.getDate() - 1); // 前日の21:00
+        end.setDate(end.getDate() - 1);     // 当日の06:00
+      }
+      return { start, end };
+    };
+
+      // Use the published site's night-session calculation for both estimates.
+    const calculateFeeBetween = (entryDate, endDate) => {
+        let totalFee = 0;
+        const NIGHT_MAX = 1800;
+        let nightAccum = 0;
+        let inNight = isNightTime(entryDate);
+
+        // 今いる夜セッションの終了境界（inNightのときだけ有効）
+        let nightBounds = inNight ? getNightSessionBounds(entryDate) : null;
+
+        // 15分刻みで加算
+        let t = new Date(entryDate);
+        while (t < endDate) {
+          const next = new Date(t);
+          next.setMinutes(next.getMinutes() + 15);
+
+          // このスロット開始時点の土日/平日レートを決定
+          const ratePer15 = isHoliday(t) ? 200 : 300;
+
+          if (isNightTime(t)) {
+            // 夜間
+            if (!inNight) {
+              // 新規夜間セッション開始
+              inNight = true;
+              nightAccum = 0;
+              nightBounds = getNightSessionBounds(t);
+            }
+
+            // 夜間料金は上限まで
+            if (nightAccum < NIGHT_MAX) {
+              nightAccum += ratePer15;
+              if (nightAccum > NIGHT_MAX) {
+                // 超過分はカット
+                const over = nightAccum - NIGHT_MAX;
+                totalFee += (ratePer15 - over);
+                nightAccum = NIGHT_MAX;
+              } else {
+                totalFee += ratePer15;
+              }
+            }
+            // セッション終了判定：翌6:00を過ぎたらリセット
+            if (nightBounds && next >= nightBounds.end) {
+              inNight = false;
+              nightAccum = 0;
+              nightBounds = null;
+            }
+          } else {
+            // 昼間
+            inNight = false; // 念のため
+            nightAccum = 0;
+            nightBounds = null;
+            totalFee += ratePer15;
+          }
+
+          t = next;
+        }
+
+          return totalFee;
+    };
+
     const calculateFeeFromDateTime = (entryDate) => {
         try {
             const now = new Date();
-            
+
             if (entryDate > now) {
                 alert("入庫日時は現在時刻より前に設定してください。\nEntry time must be before the current time.");
                 resetTicketInfo();
                 return;
             }
 
-            let totalFee = 0;
-            let nightFeeAggregated = 0;
-            const NIGHT_MAX_FEE = 1800;
-            const ratePer15Min = isHoliday(entryDate) ? 200 : 300;
-            let cursorDate = new Date(entryDate.getTime());
-
-            // 15分ごとに料金を加算していくロジック
-            while (cursorDate < now) {
-                const cursorHour = cursorDate.getHours();
-                const isNightTime = cursorHour >= 21 || cursorHour < 6;
-                
-                if (isNightTime) {
-                    if (nightFeeAggregated < NIGHT_MAX_FEE) {
-                        totalFee += ratePer15Min;
-                        nightFeeAggregated += ratePer15Min;
-                        if (nightFeeAggregated > NIGHT_MAX_FEE) {
-                            totalFee -= (nightFeeAggregated - NIGHT_MAX_FEE);
-                            nightFeeAggregated = NIGHT_MAX_FEE;
-                        }
-                    }
-                } else {
-                    totalFee += ratePer15Min;
-                }
-                
-                const prevDate = new Date(cursorDate.getTime());
-                cursorDate.setMinutes(cursorDate.getMinutes() + 15);
-
-                // 日付が変わったら夜間最大料金をリセット
-                if (cursorDate.getDate() !== prevDate.getDate()) {
-                    nightFeeAggregated = 0;
-                }
-            }
+            const totalFee = calculateFeeBetween(entryDate, now);
 
             const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
             document.getElementById('entryDate').textContent = entryDate.toLocaleDateString('ja-JP', options);
@@ -137,6 +191,52 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('currentTime').textContent = '--:--';
         document.getElementById('estimatedFee').textContent = '¥---';
     };
+
+
+    // --- Planned departure estimate, separate from the current fee and payment ---
+    const plannedForm = document.getElementById('plannedFeeForm');
+    const plannedDate = document.getElementById('plannedExitDate');
+    const plannedTime = document.getElementById('plannedExitTime');
+    const plannedFee = document.getElementById('plannedFee');
+    const plannedSummary = document.getElementById('plannedFeeSummary');
+    const plannedError = document.getElementById('plannedFeeError');
+
+    const clearPlannedEstimate = () => {
+        plannedFee.textContent = '¥---';
+        plannedSummary.textContent = '';
+        plannedError.textContent = '';
+    };
+
+    if (plannedForm) {
+        const today = new Date();
+        plannedDate.value = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+        [manualDateInput, manualTimeInput, plannedDate, plannedTime].forEach(input => {
+            input.addEventListener('input', clearPlannedEstimate);
+        });
+        plannedForm.addEventListener('submit', event => {
+            event.preventDefault();
+            clearPlannedEstimate();
+            const fail = message => { plannedError.textContent = message; };
+            if (!manualDateInput.value || !manualTimeInput.value || !plannedDate.value || !plannedTime.value) {
+                fail('入庫日時と出庫予定日時を入力してください。\nPlease enter the entry and planned departure dates and times.');
+                return;
+            }
+            const entry = new Date(`${manualDateInput.value}T${manualTimeInput.value}`);
+            const departure = new Date(`${plannedDate.value}T${plannedTime.value}`);
+            const now = new Date();
+            if (!Number.isFinite(entry.getTime()) || !Number.isFinite(departure.getTime())) {
+                fail('正しい日時を入力してください。\nPlease enter valid dates and times.');
+                return;
+            }
+            if (entry > now || departure < now || departure <= entry) {
+                fail('入庫は現在以前、出庫予定は現在以降かつ入庫より後の日時にしてください。\nEntry must not be in the future. Planned departure must be in the future and after entry.');
+                return;
+            }
+            const dateLabel = `${plannedDate.value} ${plannedTime.value}`;
+            plannedSummary.textContent = `${dateLabel}まで利用した場合の料金目安 / Estimated total if you leave at ${dateLabel}`;
+            plannedFee.textContent = `¥${calculateFeeBetween(entry, departure).toLocaleString()}`;
+        });
+    }
 
     // --- イベントリスナーのセットアップ ---
     // ▼▼▼ ここからが変更された部分 ▼▼▼

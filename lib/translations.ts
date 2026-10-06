@@ -38,7 +38,7 @@ export const translations = {
       copy_btn: "住所をコピー", copy_done: "コピーしました！",
       map_title: "Googleマップ"
     },
-    calculator: { title: "料金シミュレーション", tab_check: "今いくら？", tab_budget: "予算計算", placeholder_time: "入庫時間を入力", button_calc: "計算する", result: "現在の料金", currency: "円" },
+    calculator: { title: "料金シミュレーション", tab_check: "今いくら？", tab_budget: "何時までならいくら？", placeholder_time: "入庫時間を入力", button_calc: "計算する", result: "現在の料金目安", currency: "円", entry_date: "入庫日", entry_time: "入庫時間", exit_date: "出庫予定日", exit_time: "何時まで利用するか", planned_result: "予定時刻までの合計目安", planned_until: "この日時まで利用した場合の料金目安", planned_error: "入庫は現在以前、出庫予定は現在以降かつ入庫より後の日時にしてください。", estimate_note: "入庫からの合計目安です。実際の精算額は管理人にご確認ください。祝日判定は未対応のため、平日の祝日は目安が異なる場合があります。" },
     tenants_list: [
       { id: "1", name: "NEXT Akasaka-Base (2F)", category: "コミュニティ・ジム", description: "「大人の部活」をコンセプトに、キックボクシングやヨガを楽しめるアットホームな空間。元王者による本格指導を仕事帰りに手ぶらで体験。", discount: "1時間無料サービス（受付にて駐車券をご提示ください）", image: "/images/tenants/next-akasaka-poster.jpg" },
       { id: "2", name: "うおバル アフロ (1F)", category: "シーフードバル", description: "鮮度抜群の魚介をリーズナブルに。名物「蟹のパスタ」や牡蠣料理が人気。カウンター席もあり、お一人様からカジュアルに楽しめます。", discount: "1時間無料サービス（3,000円以上のご利用）", image: "/images/tenants/uobar-food.jpg", additionalImages: ["/images/tenants/uobar-interior.jpg", "/images/tenants/uobar-logo.jpg"] },
@@ -72,7 +72,7 @@ export const translations = {
       copy_btn: "Copy Address", copy_done: "Copied!",
       map_title: "Google Map"
     },
-    calculator: { title: "Fee Simulator", tab_check: "Current Fee", tab_budget: "Budget Plan", placeholder_time: "Enter Entry Time", button_calc: "Calculate", result: "Current Charge", currency: "JPY" },
+    calculator: { title: "Fee Simulator", tab_check: "Current Fee", tab_budget: "Fee by departure time", placeholder_time: "Enter Entry Time", button_calc: "Calculate", result: "Current estimated fee", currency: "JPY", entry_date: "Entry date", entry_time: "Entry time", exit_date: "Planned departure date", exit_time: "Planned departure time", planned_result: "Estimated total by departure", planned_until: "Estimated total if you leave at this date and time", planned_error: "Entry must not be in the future. Planned departure must be in the future and after entry.", estimate_note: "Estimated total from entry. Confirm the actual payment with the attendant. Public holidays are not detected; estimates on weekday holidays may differ." },
     tenants_list: [
       { id: "1", name: "NEXT Akasaka-Base (2F)", category: "Community & Gym", description: "A friendly space based on the concept of 'club activities for adults,' where you can enjoy kickboxing and yoga. Experience professional guidance from former champions empty-handed after work.", discount: "1-hour free (Show ticket at reception)", image: "/images/tenants/next-akasaka-poster.jpg" },
       { id: "2", name: "Uobar Afro (1F)", category: "Seafood Bar", description: "Fresh seafood at reasonable prices. The specialty 'Crab Pasta' and oyster dishes are popular. Counter seating available for solo diners.", discount: "1-hour free for 3,000+ JPY", image: "/images/tenants/uobar-food.jpg", additionalImages: ["/images/tenants/uobar-interior.jpg", "/images/tenants/uobar-logo.jpg"] },
@@ -106,7 +106,7 @@ export const translations = {
       copy_btn: "复制地址", copy_done: "已复制！",
       map_title: "谷歌地图"
     },
-    calculator: { title: "费用模拟", tab_check: "当前费用", tab_budget: "预算计算", placeholder_time: "输入入库时间", button_calc: "计算", result: "当前费用", currency: "日元" },
+    calculator: { title: "费用模拟", tab_check: "当前费用", tab_budget: "预算计算", placeholder_time: "输入入库时间", button_calc: "计算", result: "当前费用", currency: "日元", entry_date: "入库日期", entry_time: "入库时间", exit_date: "预计出库日期", exit_time: "预计出库时间", planned_result: "预计出库时的总费用", planned_until: "使用至此日期和时间的预计总费用", planned_error: "入库时间不能在未来。预计出库时间须在当前时间之后且晚于入库时间。", estimate_note: "这是从入库起的预计总费用。实际结算金额请向管理员确认。未检测法定节假日，工作日节假日的估算可能有差异。" },
     tenants_list: [
       { id: "1", name: "NEXT Akasaka-Base (2F)", category: "社区健身房", description: "以“成人的部社活动”为理念，可以享受踢拳和瑜伽的温馨空间。下班后可空手体验前冠军的专业指导。", discount: "免费停车1小时（请在接待处出示停车券）", image: "/images/tenants/next-akasaka-poster.jpg" },
       { id: "2", name: "鱼吧 Afro (1F)", category: "海鲜酒吧", description: "价格实惠的极品海鮮。招牌“螃蟹面”和生蚝料理极具人气。设有柜台席位，独自一人也能轻松享受。", discount: "满3,000日元免费停车1小时", image: "/images/tenants/uobar-food.jpg", additionalImages: ["/images/tenants/uobar-interior.jpg", "/images/tenants/uobar-logo.jpg"] },
@@ -140,7 +140,7 @@ export const translations = {
       copy_btn: "주소 복사", copy_done: "복사되었습니다!",
       map_title: "구글 지도"
     },
-    calculator: { title: "요금 시뮬레이션", tab_check: "현재 요금", tab_budget: "예산 계산", placeholder_time: "입차 시간 입력", button_calc: "계산하기", result: "현재 요금", currency: "엔" },
+    calculator: { title: "요금 시뮬레이션", tab_check: "현재 요금", tab_budget: "예산 계산", placeholder_time: "입차 시간 입력", button_calc: "계산하기", result: "현재 요금", currency: "엔", entry_date: "입차 날짜", entry_time: "입차 시간", exit_date: "출차 예정일", exit_time: "출차 예정 시간", planned_result: "출차 예정 시간까지의 예상 총요금", planned_until: "이 날짜와 시간까지 이용할 경우의 예상 총요금", planned_error: "입차 시간은 현재 이전이어야 합니다. 출차 예정은 현재 이후이며 입차보다 늦어야 합니다.", estimate_note: "입차부터의 예상 총요금입니다. 실제 정산 금액은 관리인에게 확인하세요. 공휴일을 판별하지 않아 평일 공휴일의 예상 요금은 다를 수 있습니다." },
     tenants_list: [
       { id: "1", name: "NEXT Akasaka-Base (2F)", category: "커뮤니티 & 짐", description: "'어른들의 부활동'을 컨셉으로 킥복シング과 요가를 즐길 수 있는 아늑한 공간. 전 챔피언の 본격적인 지도를 퇴근 후 빈손으로 체험해 보세요.", discount: "1시간 무료 서비스 (접수 시 주차권 제시)", image: "/images/tenants/next-akasaka-poster.jpg" },
       { id: "2", name: "우오바루 아프로 (1F)", category: "씨푸드 바", description: "신선함이 뛰어난 해산물을 합리적인 가격에. 명물 '게 파스타'와 굴 요리가 인기. 카운터석도 있어 혼자서도 가볍게 즐길 수 있습니다.", discount: "3,000엔 이상 이용 시 1시간 무료", image: "/images/tenants/uobar-food.jpg", additionalImages: ["/images/tenants/uobar-interior.jpg", "/images/tenants/uobar-logo.jpg"] },

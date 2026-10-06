@@ -21,6 +21,8 @@ export default function Calculator() {
   const [exitTime, setExitTime] = useState('');
 
   const [resultFee, setResultFee] = useState<number | null>(null);
+  const [resultEnd, setResultEnd] = useState('');
+  const clearResult = () => { setResultFee(null); setResultEnd(''); };
 
   useEffect(() => {
     // Set default date to today for convenience
@@ -33,10 +35,12 @@ export default function Calculator() {
   }, []);
 
   const handleCalculate = () => {
+    clearResult();
     if (!entryDate || !entryTime) return;
 
     const start = new Date(`${entryDate}T${entryTime}`);
-    let end = new Date();
+    const now = new Date();
+    let end = now;
 
     if (activeTab === 'budget') {
       if (!exitDate || !exitTime) return;
@@ -52,7 +56,13 @@ export default function Calculator() {
       return;
     }
 
+    if (activeTab === 'budget' && (start > now || end < now || end <= start)) {
+      alert(t.planned_error);
+      return;
+    }
+
     const fee = calculateFee(start, end);
+    setResultEnd(activeTab === 'budget' ? `${exitDate} ${exitTime}` : '');
     setResultFee(fee);
   };
 
@@ -61,13 +71,13 @@ export default function Calculator() {
       {/* Tabs */}
       <div className="flex border-b border-slate-200">
         <button
-          onClick={() => { setActiveTab('check'); setResultFee(null); }}
+          onClick={() => { setActiveTab('check'); clearResult(); }}
           className={`flex-1 py-4 text-sm font-bold tracking-wider transition-colors duration-200 ${activeTab === 'check' ? 'bg-slate-900 text-amber-400' : 'bg-slate-50 text-slate-500 hover:bg-slate-100'}`}
         >
           {t.tab_check}
         </button>
         <button
-          onClick={() => { setActiveTab('budget'); setResultFee(null); }}
+          onClick={() => { setActiveTab('budget'); clearResult(); }}
           className={`flex-1 py-4 text-sm font-bold tracking-wider transition-colors duration-200 ${activeTab === 'budget' ? 'bg-slate-900 text-amber-400' : 'bg-slate-50 text-slate-500 hover:bg-slate-100'}`}
         >
           {t.tab_budget}
@@ -83,20 +93,22 @@ export default function Calculator() {
           {/* Entry Date/Time */}
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-2">Date</label>
+              <label className="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-2" htmlFor="entryDate">{t.entry_date}</label>
               <input
                 type="date"
+                id="entryDate"
                 value={entryDate}
-                onChange={(e) => setEntryDate(e.target.value)}
+                onChange={(e) => { setEntryDate(e.target.value); clearResult(); }}
                 className="w-full h-12 px-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-amber-500 transition-all bg-slate-50 text-sm"
               />
             </div>
             <div>
-              <label className="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-2">Time</label>
+              <label className="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-2" htmlFor="entryTime">{t.entry_time}</label>
               <input
                 type="time"
+                id="entryTime"
                 value={entryTime}
-                onChange={(e) => setEntryTime(e.target.value)}
+                onChange={(e) => { setEntryTime(e.target.value); clearResult(); }}
                 className="w-full h-12 px-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-amber-500 transition-all bg-slate-50 text-sm"
               />
             </div>
@@ -106,20 +118,22 @@ export default function Calculator() {
           {activeTab === 'budget' && (
             <div className="grid grid-cols-2 gap-3 pt-2 border-t border-slate-100 mt-2">
               <div>
-                <label className="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-2">Exit Date</label>
+                <label className="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-2" htmlFor="exitDate">{t.exit_date}</label>
                 <input
                   type="date"
+                  id="exitDate"
                   value={exitDate}
-                  onChange={(e) => setExitDate(e.target.value)}
+                  onChange={(e) => { setExitDate(e.target.value); clearResult(); }}
                   className="w-full h-12 px-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-amber-500 transition-all bg-slate-50 text-sm"
                 />
               </div>
               <div>
-                <label className="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-2">Exit Time</label>
+                <label className="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-2" htmlFor="exitTime">{t.exit_time}</label>
                 <input
                   type="time"
+                  id="exitTime"
                   value={exitTime}
-                  onChange={(e) => setExitTime(e.target.value)}
+                  onChange={(e) => { setExitTime(e.target.value); clearResult(); }}
                   className="w-full h-12 px-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-amber-500 transition-all bg-slate-50 text-sm"
                 />
               </div>
@@ -133,12 +147,14 @@ export default function Calculator() {
             <span>{t.button_calc}</span>
           </button>
 
-          <div className="mt-8 pt-6 border-t border-slate-200 text-center">
-            <p className="text-sm text-slate-500 mb-1">{t.result}</p>
+          <div className="mt-8 pt-6 border-t border-slate-200 text-center" role="status" aria-live="polite" aria-atomic="true">
+            <p className="text-sm text-slate-500 mb-1">{activeTab === 'budget' ? t.planned_result : t.result}</p>
+            {resultEnd && <p className="text-sm text-slate-600 mb-2">{resultEnd} — {t.planned_until}</p>}
             <p className="text-4xl font-serif font-bold text-slate-900">
               {resultFee !== null ? resultFee.toLocaleString() : '---'}
               <span className="text-lg font-sans font-normal text-slate-500 ml-1">{t.currency}</span>
             </p>
+            <p className="text-xs text-slate-500 mt-3">{t.estimate_note}</p>
           </div>
         </div>
       </div>

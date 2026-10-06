@@ -78,6 +78,29 @@
                 </div>
                 <!-- /Ticket Info -->
             </div>
+            <section class="mt-6 pt-6 border-t border-blue-200" aria-labelledby="plannedFeeHeading">
+                <h3 id="plannedFeeHeading" class="font-bold text-lg mb-3">何時までならいくら？ / Fee by planned departure time</h3>
+                <p class="text-sm mb-4">駐車券の入庫日時と出庫予定日時から、合計料金の目安を確認できます。<br>Estimate the total fee from your ticket's entry time to your planned departure.</p>
+                <form id="plannedFeeForm">
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <label for="plannedExitDate" class="block font-semibold mb-2">出庫予定日 / Planned departure date</label>
+                            <input type="date" id="plannedExitDate" class="w-full p-3 border border-gray-300 rounded-lg text-gray-800" required>
+                        </div>
+                        <div>
+                            <label for="plannedExitTime" class="block font-semibold mb-2">何時まで利用するか / Planned departure time</label>
+                            <input type="time" id="plannedExitTime" class="w-full p-3 border border-gray-300 rounded-lg text-gray-800" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 mt-4">予定時刻までの目安を計算 / Estimate fee by departure time</button>
+                </form>
+                <div class="mt-4" role="status" aria-live="polite" aria-atomic="true">
+                    <p id="plannedFeeSummary" class="text-sm"></p>
+                    <p class="font-bold text-lg">予定時刻までの合計目安 / Estimated total by departure: <span id="plannedFee">¥---</span></p>
+                    <p id="plannedFeeError" class="text-sm text-red-200 whitespace-pre-line"></p>
+                </div>
+                <p class="text-xs mt-2">※追加料金ではなく、入庫からの合計目安です。実際の精算額は管理人にご確認ください。祝日判定は未対応のため、平日の祝日は目安が異なる場合があります。<br>*This is the estimated total from entry, not an additional charge. Confirm the actual payment with the attendant. Public holidays are not detected; estimates on weekday holidays may differ.</p>
+            </section>
         </div>
         <!-- /Manual Input Section -->
 
